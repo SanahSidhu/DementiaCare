@@ -1,2 +1,2 @@
 # DementiaCare
-Submission for the DeveloperWeek Hackathon
+Submission for the DeveloperWeek Hackathon - DementiaCareApp
