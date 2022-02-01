@@ -29,6 +29,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv("DEBUG") else False
 
+USE_DATABASE = "MONGO" if DEBUG is False else "TEST"
+print("USE_DATABASE:", USE_DATABASE)
+
+
 ALLOWED_HOSTS = []
 
 
