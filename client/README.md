@@ -13,6 +13,8 @@
 4. Any text editor of your choice.
 
 ## Installation 🔧
+to be added
 
 ### Client
+to be added
 
