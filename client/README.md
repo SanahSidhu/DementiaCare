@@ -13,10 +13,16 @@
 4. Any text editor of your choice.
 
 ## Installation 🔧
-Install Expo CLI
-$ npm install --global expo-cli
-Then go to the src directory 
-$ expo start or $yarn start
 
- It’ll open Expo Developer Tools, a browser-based graphical UI for quickly setting in which you can run the stimulator on web, iOS or android.
+Install Expo CLI
+```
+$ npm install --global expo-cli
+```
+
+Then go to the directory containing app.js: src
+```
+$ expo start or $yarn start
+```
+
+This will open Expo Developer Tools, a browser-based graphical UI for quickly setting in where you can run the stimulator on web, iOS or android.
 
