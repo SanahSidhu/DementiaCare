@@ -1,2 +1,6 @@
 class AuthenticationErrors(Exception):
     ...
+
+
+class AWSErrors(Exception):
+    ...
