@@ -1,7 +1,7 @@
 from core.errorfactory import AuthenticationErrors
 
 
-class UserExistsError(AuthenticationErrors):
+class InvalidUserCredentialsError(AuthenticationErrors):
     ...
 
 
@@ -9,5 +9,5 @@ class UserDoesNotExistError(AuthenticationErrors):
     ...
 
 
-class InvalidUserCredentialsError(AuthenticationErrors):
+class UserExistsError(AuthenticationErrors):
     ...

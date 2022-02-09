@@ -1,13 +1,18 @@
 from rest_framework import status
 from django.http import response
 
-from .errors import InvalidUserCredentialsError, UserDoesNotExistError, UserExistsError
+from .errors import (
+    InvalidUserCredentialsError,
+    UserDoesNotExistError,
+    UserExistsError,
+)
+from . import userdb
 
 
 def signup_user(request, **kwargs) -> response.JsonResponse:
     try:
-        print("signup")
-        print("request.data:", request.data)
+        print("POST REQUEST SIGNUP")
+        print("Request Object DATA:", request.data)
 
         name = request.data.get("Name")
         email = request.data.get("Email")
@@ -17,14 +22,18 @@ def signup_user(request, **kwargs) -> response.JsonResponse:
 
         print(name, email, password, phone_num, emergency_contact)
 
-        # required: function to insert user data into db
+        userdb.insert_user(name, email, password, phone_num, emergency_contact)
+
+        return response.JsonResponse(
+            data={"success_status": True},
+            status=status.HTTP_201_CREATED,
+        )
 
     except UserExistsError as uee:
         return response.JsonResponse(
             {"error": str(uee)},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -37,28 +46,30 @@ def signup_user(request, **kwargs) -> response.JsonResponse:
 
 def login_user(request, **kwargs) -> response.JsonResponse:
     try:
-        print("Login")
-        print("request.data:", request.data)
+        print("POST REQUEST LOGIN")
+        print("Request Object DATA:", request.data)
 
         email = request.data.get("Email")
         password = request.data.get("Password")
 
         print(email, password)
 
-        # required: function to match email with password
-
-    except UserDoesNotExistError as udne:
-        return response.JsonResponse(
-            {"error": str(udne)},
-            status=status.HTTP_404_NOT_FOUND,
-        )
+        if userdb.check_hash(email, password):
+            return response.JsonResponse(
+                data={"success_status": True},
+                status=status.HTTP_200_OK,
+            )
 
     except InvalidUserCredentialsError as ice:
         return response.JsonResponse(
             {"error": str(ice)},
             status=status.HTTP_401_UNAUTHORIZED,
         )
-
+    except UserDoesNotExistError as udne:
+        return response.JsonResponse(
+            {"error": str(udne)},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -85,7 +96,6 @@ def recv_checklist(request, **kwargs) -> response.JsonResponse:
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
-
 
     # other errors
     except Exception as e:
@@ -115,7 +125,6 @@ def recv_media(request, **kwargs) -> response.JsonResponse:
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
-    
 
     # other errors
     except Exception as e:
@@ -139,7 +148,7 @@ def recv_medlist(request, **kwargs) -> response.JsonResponse:
         medname = request.data.get("Medicine")
         medinfo = request.data.get("Medicine Info")
 
-        print(medname,medinfo)
+        print(medname, medinfo)
 
         # function to insert data into db
 
@@ -170,7 +179,7 @@ def recv_inventory(request, **kwargs) -> response.JsonResponse:
         item = request.data.get("Item")
         iteminfo = request.data.get("ItemInfo")
 
-        print(item,iteminfo)
+        print(item, iteminfo)
 
         # function to insert data into db
 
@@ -178,7 +187,6 @@ def recv_inventory(request, **kwargs) -> response.JsonResponse:
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
-    
 
     # other errors
     except Exception as e:
@@ -237,7 +245,7 @@ def recv_emcontact(request, **kwargs) -> response.JsonResponse:
         contact_name = request.data.get("ContactName")
         contact_num = request.data.get("ContactPhone")
 
-        print(contact_name,contact_num)
+        print(contact_name, contact_num)
 
         # function to insert data into db
 
@@ -257,4 +265,3 @@ def recv_emcontact(request, **kwargs) -> response.JsonResponse:
 
 def send_emcontacts():
     pass
-
