@@ -3,7 +3,12 @@ from rest_framework.views import APIView
 from core.throttle import throttle
 from django.http import response
 
-from .utils import login_user, signup_user
+from .utils import (
+    send_checklist_data,
+    recv_checklist_data,
+    signup_user,
+    login_user,
+)
 
 
 class SignUp(APIView):
@@ -51,10 +56,36 @@ class CheckList(APIView):
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Sending checklist data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending Checklist Data API")
+
+        cl_data = send_checklist_data(request, **kwargs)
+
+        return cl_data
 
     def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Receiving checklist data via POST requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Receiving Checklist Data API")
+
+        cl_data = recv_checklist_data(request, **kwargs)
+
+        return cl_data
 
 
 class Notes(APIView):

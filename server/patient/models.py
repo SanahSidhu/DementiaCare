@@ -1,19 +1,22 @@
-from tkinter import PhotoImage
+from django.http import response
 from dotenv import load_dotenv
-from datetime import datetime
 import hashlib, binascii
 import pymongo
-import random
-import string
 import os
 
 from core.settings import DATABASE
-
 from .errors import (
     InvalidUserCredentialsError,
+    InvalidInsertionError,
     UserDoesNotExistError,
+    DataInsertionError,
+    DataFetchingError,
+    InvalidFieldError,
+    DataRemovalError,
     UserExistsError,
 )
+
+load_dotenv()
 
 
 class UserData:
@@ -49,6 +52,10 @@ class UserData:
                 "Password": pwd,
                 "PhoneNumber": phnum,
                 "EmergencyContact": phnum,
+                "Checklist": [],
+                "Notes": [],
+                "MedList": [],
+                "Inventory": [],
             }
             self.db.insert_one(rec)
 
@@ -94,3 +101,78 @@ class UserData:
 
         else:
             raise UserDoesNotExistError("User Does Not Exist")
+
+    def insert_data(
+        self,
+        email: str,
+        text: str,
+        cl=False,
+        nt=False,
+        ml=False,
+        inv=False,
+        add=False,
+        remove=False,
+    ):
+        """
+        Func Desc
+        """
+        data = {"Text": text}
+
+        if cl == True:
+            rec = {"Checklist": data}
+        elif nt == True:
+            rec = {"Notes": data}
+        elif ml == True:
+            rec = {"MedList": data}
+        elif inv == True:
+            rec = {"Inventory": data}
+        else:
+            raise InvalidInsertionError("Invalid Insert Function Requested")
+
+        if add == True and remove == False:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update_one(
+                        {"Email": email},
+                        {"$push": {rec}},
+                    )
+                except Exception:
+                    raise DataInsertionError("Error Inserting Text in Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
+
+        elif add == False and remove == True:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update({"Email": email}, {"$pull": {rec}})
+                except Exception:
+                    raise DataRemovalError("Error Removing Text From Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
+
+    def get_db_data(self, email, cl=False, nt=False, ml=False, inv=False):
+        """
+        Func Desc
+        """
+        if cl == True:
+            option = "Checklist"
+        elif nt == True:
+            option = "Notes"
+        elif ml == True:
+            option = "MedList"
+        elif inv == True:
+            option = "Inventory"
+        else:
+            raise InvalidFieldError("Invalid Field Requested")
+
+        if data := self.db.find(
+            {"Email", email},
+            {
+                "_id": 0,
+            },
+        ):
+            docs = data[option]
+            json_data = response.JsonResponse(docs, safe=False)
+            return json_data
+
+        raise DataFetchingError("There Are No Posts In The Database At This Moment")

@@ -3,7 +3,11 @@ from django.http import response
 
 from .errors import (
     InvalidUserCredentialsError,
+    InvalidInsertionError,
     UserDoesNotExistError,
+    DataFetchingError,
+    InvalidFieldError,
+    DataRemovalError,
     UserExistsError,
 )
 from . import userdb
@@ -80,24 +84,40 @@ def login_user(request, **kwargs) -> response.JsonResponse:
         )
 
 
-def recv_checklist(request, **kwargs) -> response.JsonResponse:
+def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
     try:
-        print("Receive checklist data")
+        print("POST REQUEST CHECKLIST")
         print("request.data:", request.data)
 
-        # get user email
+        email = request.data.get("Email")
+        text = request.data.get("Text")
+        function = request.data.get("Function")
 
-        checkbox = request.data.get("Checkbox")
-        checkbox_text = request.data.get("Text")
-
-        # required: function to insert data into db
+        if function == "Add":
+            userdb.checklist_data(email, text, Add=True, cl=True)
+        elif function == "Remove":
+            userdb.checklist_data(email, text, Remove=True, cl=True)
 
         return response.JsonResponse(
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
 
-    # other errors
+    except DataRemovalError as dre:
+        return response.JsonResponse(
+            {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except InvalidInsertionError as iie:
+        return response.JsonResponse(
+            {"error": str(iie)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+    except UserDoesNotExistError as udne:
+        return response.JsonResponse(
+            {"error": str(udne)},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -106,8 +126,31 @@ def recv_checklist(request, **kwargs) -> response.JsonResponse:
         )
 
 
-def send_checklist(request, **kwargs) -> response.JsonResponse:
-    pass
+def send_checklist_data(request, **kwargs) -> response.JsonResponse:
+    try:
+        print("GET REQUEST CHECKLIST")
+        print("request.data:", request.data)
+
+        email = request.data.get("Email")
+
+        userdb.get_db_data(email, cl=True)
+
+    except InvalidFieldError as ife:
+        return response.JsonResponse(
+            {"error": str(ife)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+    except DataFetchingError as dfe:
+        return response.JsonResponse(
+            {"error": str(dfe), "success_status": False},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    except Exception as e:
+        print(e)
+        return response.JsonResponse(
+            {"error": "Error Occured While Sending Data", "success_status": False},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
 
 
 def recv_media(request, **kwargs) -> response.JsonResponse:
