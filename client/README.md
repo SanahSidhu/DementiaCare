@@ -8,13 +8,21 @@
 ### 💿 Software requirement :
 
 1. Updated browser
-2. Node.js installed (If not download it [here](https://nodejs.org/en/download/)).
-3. Python installed (If not download it [here](https://www.python.org/downloads/)).
+2. nvm, node, watchman, xcode installed.
+3. React Native, Expo installed.
 4. Any text editor of your choice.
 
 ## Installation 🔧
-to be added
 
-### Client
-to be added
+Install Expo CLI
+```
+$ npm install --global expo-cli
+```
+
+Then go to the directory containing app.js: src
+```
+$ expo start or $yarn start
+```
+
+This will open Expo Developer Tools, a browser-based graphical UI for quickly setting in where you can run the stimulator on web, iOS or android.
 
