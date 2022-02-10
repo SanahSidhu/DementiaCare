@@ -1,6 +1,7 @@
 from django.http import response
 from dotenv import load_dotenv
 import hashlib, binascii
+from typing import Dict
 import pymongo
 import os
 
@@ -27,9 +28,7 @@ class UserData:
         client = pymongo.MongoClient(DATABASE["mongo_uri"])
         self.db = client[DATABASE["db"]][os.getenv("PATIENT_DATA_COLLECTION")]
 
-    def insert_user(
-        self, name: str, email: str, pwd: str, phnum: str, emergencynum: str
-    ) -> None:
+    def insert_user(self, name: str, email: str, pwd: str, phnum: str) -> None:
         """Insert user into collection
 
         Args:
@@ -51,11 +50,11 @@ class UserData:
                 "Email": email,
                 "Password": pwd,
                 "PhoneNumber": phnum,
-                "EmergencyContact": phnum,
                 "Checklist": [],
                 "Notes": [],
                 "MedList": [],
                 "Inventory": [],
+                "EmergencyContacts": [],
             }
             self.db.insert_one(rec)
 
@@ -102,14 +101,12 @@ class UserData:
         else:
             raise UserDoesNotExistError("User Does Not Exist")
 
-    def insert_data(
+    def insert_cl_nt_data(
         self,
         email: str,
         text: str,
         cl=False,
         nt=False,
-        ml=False,
-        inv=False,
         add=False,
         remove=False,
     ):
@@ -122,10 +119,6 @@ class UserData:
             rec = {"Checklist": data}
         elif nt == True:
             rec = {"Notes": data}
-        elif ml == True:
-            rec = {"MedList": data}
-        elif inv == True:
-            rec = {"Inventory": data}
         else:
             raise InvalidInsertionError("Invalid Insert Function Requested")
 
@@ -150,7 +143,7 @@ class UserData:
             else:
                 raise UserDoesNotExistError("User Does Not Exist")
 
-    def get_db_data(self, email, cl=False, nt=False, ml=False, inv=False):
+    def get_cl_nt_data(self, email, cl=False, nt=False):
         """
         Func Desc
         """
@@ -158,10 +151,6 @@ class UserData:
             option = "Checklist"
         elif nt == True:
             option = "Notes"
-        elif ml == True:
-            option = "MedList"
-        elif inv == True:
-            option = "Inventory"
         else:
             raise InvalidFieldError("Invalid Field Requested")
 
@@ -175,4 +164,76 @@ class UserData:
             json_data = response.JsonResponse(docs, safe=False)
             return json_data
 
-        raise DataFetchingError("There Are No Posts In The Database At This Moment")
+        raise DataFetchingError(
+            "There Are No Notes/CheckLists In The Database At This Moment"
+        )
+
+    def insert_ml_inv_emg_data(
+        self,
+        email: str,
+        data: dict,
+        ml=False,
+        inv=False,
+        emg=False,
+        add=False,
+        remove=False,
+    ):
+        """
+        Func Desc
+        """
+        if ml == True:
+            rec = {"MedList": data}
+        elif inv == True:
+            rec = {"Inventory": data}
+        elif emg == True:
+            rec = {"EmergencyContacts": data}
+        else:
+            raise InvalidInsertionError("Invalid Insert Function Requested")
+
+        if add == True and remove == False:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update_one(
+                        {"Email": email},
+                        {"$push": {rec}},
+                    )
+                except Exception:
+                    raise DataInsertionError("Error Inserting Data in Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
+
+        elif add == False and remove == True:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update({"Email": email}, {"$pull": {rec}})
+                except Exception:
+                    raise DataRemovalError("Error Removing Data From Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
+
+    def get_ml_inv_emg_data(self, email, ml=False, inv=False, emg=False):
+        """
+        Func Desc
+        """
+        if ml == True:
+            option = "MedList"
+        elif inv == True:
+            option = "Inventory"
+        elif emg == True:
+            option = "EmergencyContacts"
+        else:
+            raise InvalidFieldError("Invalid Field Requested")
+
+        if data := self.db.find(
+            {"Email", email},
+            {
+                "_id": 0,
+            },
+        ):
+            docs = data[option]
+            json_data = response.JsonResponse(docs, safe=False)
+            return json_data
+
+        raise DataFetchingError(
+            "There Are No MedLists/Inventories/EmergencyContacts In The Database At This Moment"
+        )

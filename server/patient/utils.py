@@ -22,11 +22,10 @@ def signup_user(request, **kwargs) -> response.JsonResponse:
         email = request.data.get("Email")
         password = request.data.get("Password")
         phone_num = request.data.get("Phone Number")
-        emergency_contact = request.data.get("Emergency Contact")
 
-        print(name, email, password, phone_num, emergency_contact)
+        print(name, email, password, phone_num)
 
-        userdb.insert_user(name, email, password, phone_num, emergency_contact)
+        userdb.insert_user(name, email, password, phone_num)
 
         return response.JsonResponse(
             data={"success_status": True},
@@ -94,7 +93,7 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_data(email, text, Add=True, cl=True)
+            userdb.insert_cl_nt_data(email, text, Add=True, cl=True)
         elif function == "Remove":
             userdb.insert_data(email, text, Remove=True, cl=True)
 
@@ -133,7 +132,7 @@ def send_checklist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_db_data(email, cl=True)
+        userdb.get_cl_nt_data(email, cl=True)
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -163,7 +162,7 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_data(email, note, Add=True, nt=True)
+            userdb.insert_cl_nt_data(email, note, Add=True, nt=True)
         elif function == "Remove":
             userdb.insert_data(email, note, Remove=True, nt=True)
 
@@ -202,7 +201,7 @@ def send_notes_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_db_data(email, nt=True)
+        userdb.get_cl_nt_data(email, nt=True)
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -229,12 +228,22 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
         medicine = request.data.get("Medicine")
+        time = request.data.get("Time")
+        purpose = request.data.get("Purpose")
         function = request.data.get("Function")
 
+        time_lst = time.split(",")
+
+        med_data = {
+            "Medicine": medicine,
+            "Purpose": purpose,
+            "Time": time_lst,
+        }
+
         if function == "Add":
-            userdb.insert_data(email, medicine, Add=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, Add=True, ml=True)
         elif function == "Remove":
-            userdb.insert_data(email, medicine, Remove=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, Remove=True, ml=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -271,7 +280,7 @@ def send_medlist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_db_data(email, ml=True)
+        userdb.get_ml_inv_emg_data(email, ml=True)
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -297,13 +306,19 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
         print("request.data:", request.data)
 
         email = request.data.get("Email")
-        inventory = request.data.get("Inventory")
+        item = request.data.get("Item")
+        location = request.data.get("Location")
         function = request.data.get("Function")
 
+        inv_data = {
+            "Item": item,
+            "Location": location,
+        }
+
         if function == "Add":
-            userdb.insert_data(email, inventory, Add=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, Add=True, inv=True)
         elif function == "Remove":
-            userdb.insert_data(email, inventory, Remove=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, Remove=True, inv=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -333,14 +348,14 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
         )
 
 
-def send_inventory_data(request, **kwargs) -> response.JsonResponse:
+def send_inv_data(request, **kwargs) -> response.JsonResponse:
     try:
-        print("GET REQUEST CHECKLIST")
+        print("GET REQUEST INVENTORY")
         print("request.data:", request.data)
 
         email = request.data.get("Email")
 
-        userdb.get_db_data(email, inv=True)
+        userdb.get_ml_inv_emg_data(email, inv=True)
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -424,25 +439,51 @@ def send_reminder():
     pass
 
 
-def recv_emcontact(request, **kwargs) -> response.JsonResponse:
+def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
+    """
+    Func Desc
+    """
     try:
-        print("Receive medlist")
+        print("POST REQUEST EMERGENCY DATA")
         print("request.data:", request.data)
 
-        # get user email
-        contact_name = request.data.get("ContactName")
-        contact_num = request.data.get("ContactPhone")
+        email = request.data.get("Email")
+        contact_name = request.data.get("Name")
+        contact_num = request.data.get("Number")
+        relation = request.data.get("Relation")
+        function = request.data.get("Function")
 
-        print(contact_name, contact_num)
+        em_data = {
+            "Name": contact_name,
+            "Number": contact_num,
+            "Relation": relation,
+        }
 
-        # function to insert data into db
+        if function == "Add":
+            userdb.insert_ml_inv_emg_data(email, em_data, Add=True, emg=True)
+        elif function == "Remove":
+            userdb.insert_ml_inv_emg_data(email, em_data, Remove=True, emg=True)
 
         return response.JsonResponse(
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
 
-    # other errors
+    except DataRemovalError as dre:
+        return response.JsonResponse(
+            {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except InvalidInsertionError as iie:
+        return response.JsonResponse(
+            {"error": str(iie)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+    except UserDoesNotExistError as udne:
+        return response.JsonResponse(
+            {"error": str(udne)},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -451,5 +492,31 @@ def recv_emcontact(request, **kwargs) -> response.JsonResponse:
         )
 
 
-def send_emcontacts():
-    pass
+def send_emg_contact(request, **kwargs) -> response.JsonResponse:
+    """
+    Func Desc
+    """
+    try:
+        print("GET REQUEST EMERGENCY DATA")
+        print("request.data:", request.data)
+
+        email = request.data.get("Email")
+
+        userdb.get_ml_inv_emg_data(email, emg=True)
+
+    except InvalidFieldError as ife:
+        return response.JsonResponse(
+            {"error": str(ife)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+    except DataFetchingError as dfe:
+        return response.JsonResponse(
+            {"error": str(dfe), "success_status": False},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    except Exception as e:
+        print(e)
+        return response.JsonResponse(
+            {"error": "Error Occured While Sending Data", "success_status": False},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
