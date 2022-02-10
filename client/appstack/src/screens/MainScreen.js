@@ -1,9 +1,8 @@
-import React, { useEffect, useState} from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer} from "@react-navigation/native";
 import BottomTab from './BottomTab';
 
-export default function App() {
+export default function MainScreen() {
   return (
     <NavigationContainer independent={true}>
       <BottomTab/>
@@ -19,7 +18,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-
-
-
