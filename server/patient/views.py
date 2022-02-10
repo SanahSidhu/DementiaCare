@@ -6,6 +6,14 @@ from django.http import response
 from .utils import (
     send_checklist_data,
     recv_checklist_data,
+    send_medlist_data,
+    recv_medlist_data,
+    send_emg_contact,
+    recv_emg_contact,
+    send_notes_data,
+    recv_notes_data,
+    send_inv_data,
+    recv_inv_data,
     signup_user,
     login_user,
 )
@@ -52,7 +60,6 @@ class Login(APIView):
 
 
 class CheckList(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
@@ -89,40 +96,114 @@ class CheckList(APIView):
 
 
 class Notes(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Sending Notes data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending Notes Data API")
+
+        nt_data = send_notes_data(request, **kwargs)
+
+        return nt_data
 
     def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Receiving Notes data via POST requests
 
+        Args:
+            request ([type])
 
-class Media(APIView):
-    permission_classes = (AllowAny,)
-    throttle_classes = [throttle]
+        Returns:
+            JsonResponse
+        """
 
-    def get(selfself, request, **kwargs) -> response.JsonResponse:
-        pass
+        print("Receiving Notes Data API")
 
-    def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        nt_data = recv_notes_data(request, **kwargs)
+
+        return nt_data
 
 
 class MedList(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
-    def get(selfself, request, **kwargs) -> response.JsonResponse:
-        pass
+    def get(self, request, **kwargs) -> response.JsonResponse:
+        """Sending MedList data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending MedList Data API")
+
+        ml_data = send_medlist_data(request, **kwargs)
+
+        return ml_data
 
     def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Receiving MedList data via POST requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Receiving MedList Data API")
+
+        ml_data = recv_medlist_data(request, **kwargs)
+
+        return ml_data
 
 
 class Inventory(APIView):
-    permission_classes = (AllowAny,)
+    throttle_classes = [throttle]
+
+    def get(self, request, **kwargs) -> response.JsonResponse:
+        """Sending inventory data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending Inventory Data API")
+
+        inv_data = send_inv_data(request, **kwargs)
+
+        return inv_data
+
+    def post(self, request, **kwargs) -> response.JsonResponse:
+        """Receiving inventory data via POST requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Receiving Inventory Data API")
+
+        inv_data = recv_inv_data(request, **kwargs)
+
+        return inv_data
+
+
+class Media(APIView):
     throttle_classes = [throttle]
 
     def get(selfself, request, **kwargs) -> response.JsonResponse:
@@ -133,7 +214,6 @@ class Inventory(APIView):
 
 
 class Calendar(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
@@ -144,7 +224,6 @@ class Calendar(APIView):
 
 
 class RemindersAlerts(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
@@ -155,11 +234,36 @@ class RemindersAlerts(APIView):
 
 
 class EmergencyContacts(APIView):
-    permission_classes = (AllowAny,)
     throttle_classes = [throttle]
 
     def get(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Sending emergency contact data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending Emergency Contact Data API")
+
+        em_contact_data = send_emg_contact(request, **kwargs)
+
+        return em_contact_data
 
     def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Receiving emergency contact data via POST requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Receiving Emergency Contact Data API")
+
+        em_con_data = recv_emg_contact(request, **kwargs)
+
+        return em_con_data
