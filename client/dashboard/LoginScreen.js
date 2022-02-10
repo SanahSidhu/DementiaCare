@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component , useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,9 +14,9 @@ export default class LoginScreen extends Component {
 
   constructor(props) {
     super(props);
-    state = {
-      email   : '',
-      password: '',
+    this.setState = {
+      email   : 'user@gmail.com',
+      password: 'pass',
     }
   }
 

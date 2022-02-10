@@ -19,15 +19,17 @@ export default class Dashboard extends Component{
       modalVisible:false,
       userSelected:[],
       data: [
-        {id:1,  name: "Comunity",   image:"https://img.icons8.com/clouds/100/000000/groups.png",           count:124.711},
-        {id:2,  name: "Housing",    image:"https://img.icons8.com/color/100/000000/real-estate.png",       count:234.722},
-        {id:3,  name: "Jobs",       image:"https://img.icons8.com/color/100/000000/find-matching-job.png", count:324.723} ,
-        {id:4,  name: "Personal",   image:"https://img.icons8.com/clouds/100/000000/employee-card.png",    count:154.573} ,
-        {id:5,  name: "For sale",   image:"https://img.icons8.com/color/100/000000/land-sales.png",        count:124.678} ,
+        {id:1,  name: "Calendar", image:"https://img.icons8.com/external-xnimrodx-lineal-color-xnimrodx/344/external-schedule-calendar-xnimrodx-lineal-color-xnimrodx.png"},
+        {id:2,  name: "Medication",   image:"https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-medicine-hospital-justicon-lineal-color-justicon.png"},
+        {id:6,  name: "Photos",   image:"https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/344/external-photos-photography-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"} ,
+        {id:5,  name: "Notes",   image:"https://img.icons8.com/external-bearicons-outline-color-bearicons/344/external-notes-graphic-design-bearicons-outline-color-bearicons.png"} ,
+        {id:3,  name: "CheckList",       image:"https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/344/external-check-list-home-office-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"} ,
+        {id:4,  name: "Contacts",  component:"CheckList", image:"https://img.icons8.com/external-soft-fill-juicy-fish/344/external-contacts-folders-soft-fill-soft-fill-juicy-fish.png"} ,
       ]
     };
   }
 
+  
   clickEventListener = (item) => {
     Alert.alert('Message', 'Item clicked. '+item.name);
   }
@@ -48,7 +50,6 @@ export default class Dashboard extends Component{
               <Image style={styles.image} source={{uri: item.image}}/>
               <View style={styles.cardContent}>
                 <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.count}>{item.count}</Text>
                 <TouchableOpacity style={styles.followButton} onPress={()=> this.clickEventListener(item)}>
                   <Text style={styles.followButtonText}>Explore now</Text>  
                 </TouchableOpacity>
@@ -75,11 +76,9 @@ const styles = StyleSheet.create({
     marginTop:10
   },
   image:{
-    width:90,
-    height:90,
-    borderRadius:45,
-    borderWidth:2,
-    borderColor:"#ebf0f7"
+    width: 70,
+    height:70,
+    margin: 10,
   },
 
   card:{
@@ -107,12 +106,6 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     color:"#3399ff",
     fontWeight:'bold'
-  },
-  count:{
-    fontSize:14,
-    flex:1,
-    alignSelf:'center',
-    color:"#6666ff"
   },
   followButton: {
     marginTop:10,
