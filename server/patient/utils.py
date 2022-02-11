@@ -1,16 +1,19 @@
 from rest_framework import status
 from django.http import response
+import datetime as d
 
+from core.settings import AWS_BUCKET_FOLDER, AWS_OBJECT_URL_PREFIX
 from .errors import (
     InvalidUserCredentialsError,
     UserDoesNotExistError,
     InvalidInsertionError,
+    DataInsertionError,
     DataFetchingError,
     InvalidFieldError,
     DataRemovalError,
     UserExistsError,
 )
-from . import userdb
+from . import userdb, s3
 
 
 def signup_user(request, **kwargs) -> response.JsonResponse:
@@ -93,9 +96,9 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_cl_nt_data(email, text, Add=True, cl=True)
+            userdb.insert_cl_nt_data(email, text, add=True, cl=True)
         elif function == "Remove":
-            userdb.insert_data(email, text, Remove=True, cl=True)
+            userdb.insert_cl_nt_data(email, text, remove=True, cl=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -105,6 +108,11 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -132,7 +140,9 @@ def send_checklist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_cl_nt_data(email, cl=True)
+        record = userdb.get_cl_nt_data(email, cl=True)
+
+        return record
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -162,9 +172,9 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_cl_nt_data(email, note, Add=True, nt=True)
+            userdb.insert_cl_nt_data(email, note, add=True, nt=True)
         elif function == "Remove":
-            userdb.insert_data(email, note, Remove=True, nt=True)
+            userdb.insert_cl_nt_data(email, note, remove=True, nt=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -174,6 +184,11 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -201,7 +216,9 @@ def send_notes_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_cl_nt_data(email, nt=True)
+        record = userdb.get_cl_nt_data(email, nt=True)
+
+        return record
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -241,9 +258,9 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, med_data, Add=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, add=True, ml=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, med_data, Remove=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, remove=True, ml=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -253,6 +270,11 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -280,7 +302,9 @@ def send_medlist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, ml=True)
+        medlist = userdb.get_ml_inv_emg_data(email, ml=True)
+
+        return medlist
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -316,9 +340,9 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, inv_data, Add=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, add=True, inv=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, inv_data, Remove=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, remove=True, inv=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -328,6 +352,11 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -355,7 +384,9 @@ def send_inv_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, inv=True)
+        inventory = userdb.get_ml_inv_emg_data(email, inv=True)
+
+        return inventory
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -396,9 +427,9 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, em_data, Add=True, emg=True)
+            userdb.insert_ml_inv_emg_data(email, em_data, add=True, emg=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, em_data, Remove=True, emg=True)
+            userdb.insert_ml_inv_emg_data(email, em_data, remove=True, emg=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -408,6 +439,11 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -438,7 +474,9 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, emg=True)
+        emg_cont = userdb.get_ml_inv_emg_data(email, emg=True)
+
+        return emg_cont
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -460,21 +498,58 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
 
 def recv_media(request, **kwargs) -> response.JsonResponse:
     try:
-        print("Receive media")
+        print("POST REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        # get user email
-        # check image or video
-        media = request.data.get("Media")
+        email = request.data.get("Email")
+        filename = request.data.get("Filename")
+        fileobj = request.data.get("File")
+        desc = request.data.get("Description")
+        function = request.data.get("Function")
 
-        # function to insert data into db
+        print(email, filename, fileobj, desc)
+
+        date = d.datetime.now()
+        date = date.strftime("%d/%m/%Y, %H:%M:%S")
+        filename = filename.lower()
+        subfolder = email.split("@")[0]
+        cloudFilename = AWS_BUCKET_FOLDER + subfolder + "/" + filename
+        objectURL = AWS_OBJECT_URL_PREFIX + cloudFilename
+
+        data = {
+            "Date": date,
+            "Filename": filename,
+            "CloudFilename": cloudFilename,
+            "ObjectURL": objectURL,
+        }
+
+        if function == "Add":
+            userdb.insert_media(email, data, add=True)
+        elif function == "Remove":
+            userdb.insert_media(email, data, remove=True)
+
+        s3.upload_file_to_s3(cloudFilename, fileobj)
 
         return response.JsonResponse(
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
 
-    # other errors
+    except DataRemovalError as dre:
+        return response.JsonResponse(
+            {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except UserDoesNotExistError as udne:
+        return response.JsonResponse(
+            {"error": str(udne)},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -484,25 +559,32 @@ def recv_media(request, **kwargs) -> response.JsonResponse:
 
 
 def send_media(request, **kwargs) -> response.JsonResponse:
+    """
+    Func Desc
+    """
     try:
-        print("Receive media")
+        print("GET REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        # get user email
-        # check image or video
-        media = request.data.get("Media")
+        email = request.data.get("Email")
 
-        # function to insert data into db
+        media = userdb.get_media(email)
 
+        return media
+
+    except InvalidFieldError as ife:
         return response.JsonResponse(
-            {"success_status": True},
-            status=status.HTTP_200_OK,
+            {"error": str(ife)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
-
-    # other errors
+    except DataFetchingError as dfe:
+        return response.JsonResponse(
+            {"error": str(dfe), "success_status": False},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
-            {"error": "Error Occured While Receiving Data", "success_status": False},
+            {"error": "Error Occured While Sending Data", "success_status": False},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
