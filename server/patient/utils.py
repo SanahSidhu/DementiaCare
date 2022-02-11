@@ -96,9 +96,9 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_cl_nt_data(email, text, Add=True, cl=True)
+            userdb.insert_cl_nt_data(email, text, add=True, cl=True)
         elif function == "Remove":
-            userdb.insert_data(email, text, Remove=True, cl=True)
+            userdb.insert_cl_nt_data(email, text, remove=True, cl=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -170,9 +170,9 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
         function = request.data.get("Function")
 
         if function == "Add":
-            userdb.insert_cl_nt_data(email, note, Add=True, nt=True)
+            userdb.insert_cl_nt_data(email, note, add=True, nt=True)
         elif function == "Remove":
-            userdb.insert_data(email, note, Remove=True, nt=True)
+            userdb.insert_cl_nt_data(email, note, remove=True, nt=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -254,9 +254,9 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, med_data, Add=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, add=True, ml=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, med_data, Remove=True, ml=True)
+            userdb.insert_ml_inv_emg_data(email, med_data, remove=True, ml=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -334,9 +334,9 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, inv_data, Add=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, add=True, inv=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, inv_data, Remove=True, inv=True)
+            userdb.insert_ml_inv_emg_data(email, inv_data, remove=True, inv=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -419,9 +419,9 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_ml_inv_emg_data(email, em_data, Add=True, emg=True)
+            userdb.insert_ml_inv_emg_data(email, em_data, add=True, emg=True)
         elif function == "Remove":
-            userdb.insert_ml_inv_emg_data(email, em_data, Remove=True, emg=True)
+            userdb.insert_ml_inv_emg_data(email, em_data, remove=True, emg=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -514,9 +514,11 @@ def recv_media(request, **kwargs) -> response.JsonResponse:
         }
 
         if function == "Add":
-            userdb.insert_media(email, data, Add=True)
+            userdb.insert_media(email, data, add=True)
         elif function == "Remove":
-            userdb.insert_media(email, data, Remove=True)
+            userdb.insert_media(email, data, remove=True)
+
+        s3.upload_file_to_s3(cloudFilename, fileobj)
 
         return response.JsonResponse(
             {"success_status": True},
