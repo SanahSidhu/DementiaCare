@@ -3,8 +3,8 @@ from django.http import response
 
 from .errors import (
     InvalidUserCredentialsError,
-    InvalidInsertionError,
     UserDoesNotExistError,
+    InvalidInsertionError,
     DataFetchingError,
     InvalidFieldError,
     DataRemovalError,
@@ -375,70 +375,6 @@ def send_inv_data(request, **kwargs) -> response.JsonResponse:
         )
 
 
-def recv_media(request, **kwargs) -> response.JsonResponse:
-    try:
-        print("Receive media")
-        print("request.data:", request.data)
-
-        # get user email
-        # check image or video
-        media = request.data.get("Media")
-
-        # function to insert data into db
-
-        return response.JsonResponse(
-            {"success_status": True},
-            status=status.HTTP_200_OK,
-        )
-
-    # other errors
-    except Exception as e:
-        print(e)
-        return response.JsonResponse(
-            {"error": "Error Occured While Receiving Data", "success_status": False},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-
-def send_media():
-    pass
-
-
-def recv_caldata(request, **kwargs) -> response.JsonResponse:
-    try:
-        print("Receive caldata")
-        print("request.data:", request.data)
-
-        # get user email
-        date = request.data.get("Date")
-        event = request.data.get("Event")
-
-        print(date, event)
-
-        # function to insert data into db
-
-        return response.JsonResponse(
-            {"success_status": True},
-            status=status.HTTP_200_OK,
-        )
-
-    # other errors
-    except Exception as e:
-        print(e)
-        return response.JsonResponse(
-            {"error": "Error Occured While Receiving Data", "success_status": False},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-
-def send_caldata():
-    pass
-
-
-def send_reminder():
-    pass
-
-
 def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
     """
     Func Desc
@@ -518,5 +454,55 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
         print(e)
         return response.JsonResponse(
             {"error": "Error Occured While Sending Data", "success_status": False},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+def recv_media(request, **kwargs) -> response.JsonResponse:
+    try:
+        print("Receive media")
+        print("request.data:", request.data)
+
+        # get user email
+        # check image or video
+        media = request.data.get("Media")
+
+        # function to insert data into db
+
+        return response.JsonResponse(
+            {"success_status": True},
+            status=status.HTTP_200_OK,
+        )
+
+    # other errors
+    except Exception as e:
+        print(e)
+        return response.JsonResponse(
+            {"error": "Error Occured While Receiving Data", "success_status": False},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+def send_media(request, **kwargs) -> response.JsonResponse:
+    try:
+        print("Receive media")
+        print("request.data:", request.data)
+
+        # get user email
+        # check image or video
+        media = request.data.get("Media")
+
+        # function to insert data into db
+
+        return response.JsonResponse(
+            {"success_status": True},
+            status=status.HTTP_200_OK,
+        )
+
+    # other errors
+    except Exception as e:
+        print(e)
+        return response.JsonResponse(
+            {"error": "Error Occured While Receiving Data", "success_status": False},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )

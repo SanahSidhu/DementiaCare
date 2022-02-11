@@ -1,7 +1,6 @@
 from django.http import response
 from dotenv import load_dotenv
 import hashlib, binascii
-from typing import Dict
 import pymongo
 import os
 
