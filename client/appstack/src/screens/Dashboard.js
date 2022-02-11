@@ -39,6 +39,8 @@ export default class Dashboard extends Component{
         navigate('CheckList');
     } else if(item.name === "Photos") {
         navigate('PhotoScreen');
+    } else if(item.name === "Notes") {
+        navigate('MemoScreen');
     } else {
         Alert.alert('Message', 'Item clicked. '+item.name);
     }

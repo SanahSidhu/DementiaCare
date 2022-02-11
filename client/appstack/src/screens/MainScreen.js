@@ -6,6 +6,8 @@ import UserScreen from './UserScreen';
 import Settings from './Settings';
 import CheckList from './CheckList';
 import PhotoScreen from './PhotoScreen';
+import NoteScreen from './NoteScreen';
+import MemoScreen from './MemoScreen';
 
 const Stack = createStackNavigator()
 
@@ -17,6 +19,8 @@ export default function MainScreen() {
         <Stack.Screen name="UserScreen" component={UserScreen} />
          <Stack.Screen name="CheckList" component={CheckList} />
          <Stack.Screen name="PhotoScreen" component={PhotoScreen} />
+         <Stack.Screen name ="MemoScreen" component={MemoScreen} />
+         <Stack.Screen name ="NoteScreen" component={NoteScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

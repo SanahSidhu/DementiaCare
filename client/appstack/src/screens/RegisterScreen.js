@@ -27,7 +27,7 @@ export default function RegisterScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.navigate('MainScreen');
+    navigation.navigate('LoginScreen')
   }
 
   return (
