@@ -54,6 +54,7 @@ class UserData:
                 "MedList": [],
                 "Inventory": [],
                 "EmergencyContacts": [],
+                "Media": [],
             }
             self.db.insert_one(rec)
 
@@ -236,3 +237,15 @@ class UserData:
         raise DataFetchingError(
             "There Are No MedLists/Inventories/EmergencyContacts In The Database At This Moment"
         )
+
+    def insert_media(self, email: str, data: dict):
+        """
+        Func Desc
+        """
+        pass
+
+    def get_media(self, email: str):
+        """
+        Func Desc
+        """
+        pass

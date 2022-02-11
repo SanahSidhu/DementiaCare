@@ -15,6 +15,8 @@ from .utils import (
     send_inv_data,
     recv_inv_data,
     signup_user,
+    send_media,
+    recv_media,
     login_user,
 )
 
@@ -206,31 +208,37 @@ class Inventory(APIView):
 class Media(APIView):
     throttle_classes = [throttle]
 
-    def get(selfself, request, **kwargs) -> response.JsonResponse:
-        pass
-
-    def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
-
-
-class Calendar(APIView):
-    throttle_classes = [throttle]
-
     def get(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Sending media data when hit with GET requests
+
+        Args:
+            request ([type])
+
+        Returns:
+            JsonResponse
+        """
+
+        print("Sending Media Data API")
+
+        med_data = send_media(request, **kwargs)
+
+        return med_data
 
     def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        """Receiving media data via POST requests
 
+        Args:
+            request ([type])
 
-class RemindersAlerts(APIView):
-    throttle_classes = [throttle]
+        Returns:
+            JsonResponse
+        """
 
-    def get(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        print("Receiving Media Data API")
 
-    def post(self, request, **kwargs) -> response.JsonResponse:
-        pass
+        med_data = recv_media(request, **kwargs)
+
+        return med_data
 
 
 class EmergencyContacts(APIView):
