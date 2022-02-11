@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Settings from './Settings';
 import Dashboard from './Dashboard';
 import LoginScreen from './LoginScreen';
+import CheckList from './CheckList';
 
 const Tab = createBottomTabNavigator();
 

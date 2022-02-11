@@ -32,9 +32,16 @@ export default class Dashboard extends Component{
     };
   }
 
-  
+
   clickEventListener = (item) => {
-    Alert.alert('Message', 'Item clicked. '+item.name);
+    const { navigate } = this.props.navigation;
+    if(item.name === "CheckList") {
+        navigate('CheckList');
+    } else if(item.name === "Photos") {
+        navigate('PhotoScreen');
+    } else {
+        Alert.alert('Message', 'Item clicked. '+item.name);
+    }
   }
 
   render() {

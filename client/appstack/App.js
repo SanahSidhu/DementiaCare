@@ -33,6 +33,8 @@ export default function App() {
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}
           />
+
+
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

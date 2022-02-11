@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import Paragraph from '../components/Paragraph'
 import Button from '../components/Button'
 
-export default function Settings({ navigation }) {
+export default function Settings({ navigation: { popToTop } }) {
   return (
     <Background>
       <Logo />
@@ -13,11 +13,7 @@ export default function Settings({ navigation }) {
       <Button
         mode="outlined"
         onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'StartScreen' }],
-          })
-        }
+         popToTop()}
       >
         Logout
       </Button>
