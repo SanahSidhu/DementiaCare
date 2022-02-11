@@ -1,7 +1,10 @@
 from rest_framework import status
 from django.http import response
+import datetime as d
 
+from core.settings import AWS_BUCKET_FOLDER, AWS_OBJECT_URL_PREFIX
 from .errors import (
+    DataInsertionError,
     InvalidUserCredentialsError,
     UserDoesNotExistError,
     InvalidInsertionError,
@@ -10,7 +13,7 @@ from .errors import (
     DataRemovalError,
     UserExistsError,
 )
-from . import userdb
+from . import userdb, s3
 
 
 def signup_user(request, **kwargs) -> response.JsonResponse:
@@ -107,6 +110,11 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
             {"error": str(dre)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
     except InvalidInsertionError as iie:
         return response.JsonResponse(
             {"error": str(iie)},
@@ -174,6 +182,11 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -255,6 +268,11 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
             {"error": str(dre)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
     except InvalidInsertionError as iie:
         return response.JsonResponse(
             {"error": str(iie)},
@@ -328,6 +346,11 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
     except DataRemovalError as dre:
         return response.JsonResponse(
             {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
     except InvalidInsertionError as iie:
@@ -410,6 +433,11 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
             {"error": str(dre)},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
     except InvalidInsertionError as iie:
         return response.JsonResponse(
             {"error": str(iie)},
@@ -460,21 +488,56 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
 
 def recv_media(request, **kwargs) -> response.JsonResponse:
     try:
-        print("Receive media")
+        print("POST REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        # get user email
-        # check image or video
-        media = request.data.get("Media")
+        email = request.data.get("Email")
+        filename = request.data.get("Filename")
+        fileobj = request.data.get("File")
+        desc = request.data.get("Description")
+        function = request.data.get("Function")
 
-        # function to insert data into db
+        print(email, filename, fileobj, desc)
+
+        date = d.datetime.now()
+        date = date.strftime("%d/%m/%Y, %H:%M:%S")
+        filename = filename.lower()
+        subfolder = email.split("@")[0]
+        cloudFilename = AWS_BUCKET_FOLDER + subfolder + "/" + filename
+        objectURL = AWS_OBJECT_URL_PREFIX + cloudFilename
+
+        data = {
+            "Date": date,
+            "Filename": filename,
+            "CloudFilename": cloudFilename,
+            "ObjectURL": objectURL,
+        }
+
+        if function == "Add":
+            userdb.insert_media(email, data, Add=True)
+        elif function == "Remove":
+            userdb.insert_media(email, data, Remove=True)
 
         return response.JsonResponse(
             {"success_status": True},
             status=status.HTTP_200_OK,
         )
 
-    # other errors
+    except DataRemovalError as dre:
+        return response.JsonResponse(
+            {"error": str(dre)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except DataInsertionError as die:
+        return response.JsonResponse(
+            {"error": str(die)},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+    except UserDoesNotExistError as udne:
+        return response.JsonResponse(
+            {"error": str(udne)},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
@@ -484,25 +547,30 @@ def recv_media(request, **kwargs) -> response.JsonResponse:
 
 
 def send_media(request, **kwargs) -> response.JsonResponse:
+    """
+    Func Desc
+    """
     try:
-        print("Receive media")
+        print("GET REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        # get user email
-        # check image or video
-        media = request.data.get("Media")
+        email = request.data.get("Email")
 
-        # function to insert data into db
+        userdb.get_media(email)
 
+    except InvalidFieldError as ife:
         return response.JsonResponse(
-            {"success_status": True},
-            status=status.HTTP_200_OK,
+            {"error": str(ife)},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
-
-    # other errors
+    except DataFetchingError as dfe:
+        return response.JsonResponse(
+            {"error": str(dfe), "success_status": False},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     except Exception as e:
         print(e)
         return response.JsonResponse(
-            {"error": "Error Occured While Receiving Data", "success_status": False},
+            {"error": "Error Occured While Sending Data", "success_status": False},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )

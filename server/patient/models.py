@@ -238,14 +238,47 @@ class UserData:
             "There Are No MedLists/Inventories/EmergencyContacts In The Database At This Moment"
         )
 
-    def insert_media(self, email: str, data: dict):
+    def insert_media(self, email: str, data: dict, add=False, remove=False):
         """
         Func Desc
         """
-        pass
+        rec = {"Media": data}
+
+        if add == True and remove == False:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update_one(
+                        {"Email": email},
+                        {"$push": {rec}},
+                    )
+                except Exception:
+                    raise DataInsertionError("Error Inserting Data in Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
+
+        elif add == False and remove == True:
+            if self.db.find_one({"Email": email}):
+                try:
+                    self.db.update({"Email": email}, {"$pull": {rec}})
+                except Exception:
+                    raise DataRemovalError("Error Removing Data From Database")
+            else:
+                raise UserDoesNotExistError("User Does Not Exist")
 
     def get_media(self, email: str):
         """
         Func Desc
         """
-        pass
+        if data := self.db.find(
+            {"Email", email},
+            {
+                "_id": 0,
+            },
+        ).sort("Date", -1):
+            docs = data["Media"]
+            json_data = response.JsonResponse(docs, safe=False)
+            return json_data
+
+        raise DataFetchingError(
+            "There Are No MedLists/Inventories/EmergencyContacts In The Database At This Moment"
+        )
