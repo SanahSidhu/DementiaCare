@@ -374,6 +374,7 @@ def send_inv_data(request, **kwargs) -> response.JsonResponse:
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
+
 def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
     """
     Func Desc
