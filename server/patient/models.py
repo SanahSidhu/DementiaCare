@@ -1,3 +1,4 @@
+from rest_framework import status
 from django.http import response
 from dotenv import load_dotenv
 import hashlib, binascii
@@ -161,7 +162,9 @@ class UserData:
             },
         ):
             docs = data[option]
-            json_data = response.JsonResponse(docs, safe=False)
+            json_data = response.JsonResponse(
+                docs, safe=False, status=status.HTTP_200_OK
+            )
             return json_data
 
         raise DataFetchingError(
@@ -231,7 +234,9 @@ class UserData:
             },
         ):
             docs = data[option]
-            json_data = response.JsonResponse(docs, safe=False)
+            json_data = response.JsonResponse(
+                docs, safe=False, status=status.HTTP_200_OK
+            )
             return json_data
 
         raise DataFetchingError(
@@ -276,9 +281,9 @@ class UserData:
             },
         ).sort("Date", -1):
             docs = data["Media"]
-            json_data = response.JsonResponse(docs, safe=False)
+            json_data = response.JsonResponse(
+                docs, safe=False, status=status.HTTP_200_OK
+            )
             return json_data
 
-        raise DataFetchingError(
-            "There Are No MedLists/Inventories/EmergencyContacts In The Database At This Moment"
-        )
+        raise DataFetchingError("There Is No Media In The Database At This Moment")

@@ -4,10 +4,10 @@ import datetime as d
 
 from core.settings import AWS_BUCKET_FOLDER, AWS_OBJECT_URL_PREFIX
 from .errors import (
-    DataInsertionError,
     InvalidUserCredentialsError,
     UserDoesNotExistError,
     InvalidInsertionError,
+    DataInsertionError,
     DataFetchingError,
     InvalidFieldError,
     DataRemovalError,
@@ -140,7 +140,9 @@ def send_checklist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_cl_nt_data(email, cl=True)
+        record = userdb.get_cl_nt_data(email, cl=True)
+
+        return record
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -214,7 +216,9 @@ def send_notes_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_cl_nt_data(email, nt=True)
+        record = userdb.get_cl_nt_data(email, nt=True)
+
+        return record
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -298,7 +302,9 @@ def send_medlist_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, ml=True)
+        medlist = userdb.get_ml_inv_emg_data(email, ml=True)
+
+        return medlist
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -378,7 +384,9 @@ def send_inv_data(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, inv=True)
+        inventory = userdb.get_ml_inv_emg_data(email, inv=True)
+
+        return inventory
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -466,7 +474,9 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_ml_inv_emg_data(email, emg=True)
+        emg_cont = userdb.get_ml_inv_emg_data(email, emg=True)
+
+        return emg_cont
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
@@ -558,7 +568,9 @@ def send_media(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")
 
-        userdb.get_media(email)
+        media = userdb.get_media(email)
+
+        return media
 
     except InvalidFieldError as ife:
         return response.JsonResponse(
