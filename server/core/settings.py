@@ -33,7 +33,7 @@ USE_DATABASE = "MONGO" if DEBUG is False else "TEST"
 print("USE_DATABASE:", USE_DATABASE)
 
 
-ALLOWED_HOSTS = ["d2a4-120-57-216-248.ngrok.io"]
+ALLOWED_HOSTS = [""]
 
 
 # Application definition
@@ -124,7 +124,7 @@ if DEBUG:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-            "LOCATION": "/home/nvombat/Desktop/MusicApp/server/cache",
+            "LOCATION": "/home/nvombat/Desktop/DementiaCare/server/cache",
         }
     }
 else:
