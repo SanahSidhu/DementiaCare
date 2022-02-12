@@ -21,10 +21,10 @@ def signup_user(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST SIGNUP")
         print("Request Object DATA:", request.data)
 
-        name = request.data.get("Name")
-        email = request.data.get("Email")
-        password = request.data.get("Password")
-        phone_num = request.data.get("PhoneNumber")
+        name = request.data.get("Name")["value"]
+        email = request.data.get("Email")["value"]
+        password = request.data.get("Password")["value"]
+        phone_num = request.data.get("PhoneNumber")["value"]
 
         print(name, email, password, phone_num)
 
@@ -55,8 +55,8 @@ def login_user(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST LOGIN")
         print("Request Object DATA:", request.data)
 
-        email = request.data.get("Email")
-        password = request.data.get("Password")
+        email = request.data.get("Email")["value"]
+        password = request.data.get("Password")["value"]
 
         print(email, password)
 
@@ -91,9 +91,9 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST CHECKLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        text = request.data.get("Text")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        text = request.data.get("Text")["value"]
+        function = request.data.get("Function")["value"]
 
         if function == "Add":
             userdb.insert_cl_nt_data(email, text, add=True, cl=True)
@@ -138,7 +138,7 @@ def send_checklist_data(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST CHECKLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         record = userdb.get_cl_nt_data(email, cl=True)
 
@@ -167,9 +167,9 @@ def recv_notes_data(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST NOTES")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        note = request.data.get("Note")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        note = request.data.get("Note")["value"]
+        function = request.data.get("Function")["value"]
 
         if function == "Add":
             userdb.insert_cl_nt_data(email, note, add=True, nt=True)
@@ -214,7 +214,7 @@ def send_notes_data(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST NOTES")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         record = userdb.get_cl_nt_data(email, nt=True)
 
@@ -243,11 +243,11 @@ def recv_medlist_data(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST MEDLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        medicine = request.data.get("Medicine")
-        time = request.data.get("Time")
-        purpose = request.data.get("Purpose")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        medicine = request.data.get("Medicine")["value"]
+        time = request.data.get("Time")["value"]
+        purpose = request.data.get("Purpose")["value"]
+        function = request.data.get("Function")["value"]
 
         time_lst = time.split(",")
 
@@ -300,7 +300,7 @@ def send_medlist_data(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST MEDLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         medlist = userdb.get_ml_inv_emg_data(email, ml=True)
 
@@ -329,10 +329,10 @@ def recv_inv_data(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST INVENTORY")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        item = request.data.get("Item")
-        location = request.data.get("Location")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        item = request.data.get("Item")["value"]
+        location = request.data.get("Location")["value"]
+        function = request.data.get("Function")["value"]
 
         inv_data = {
             "Item": item,
@@ -382,7 +382,7 @@ def send_inv_data(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST INVENTORY")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         inventory = userdb.get_ml_inv_emg_data(email, inv=True)
 
@@ -414,11 +414,11 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST EMERGENCY DATA")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        contact_name = request.data.get("Name")
-        contact_num = request.data.get("Number")
-        relation = request.data.get("Relation")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        contact_name = request.data.get("Name")["value"]
+        contact_num = request.data.get("Number")["value"]
+        relation = request.data.get("Relation")["value"]
+        function = request.data.get("Function")["value"]
 
         em_data = {
             "Name": contact_name,
@@ -472,7 +472,7 @@ def send_emg_contact(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST EMERGENCY DATA")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         emg_cont = userdb.get_ml_inv_emg_data(email, emg=True)
 
@@ -501,11 +501,11 @@ def recv_media(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
-        filename = request.data.get("Filename")
-        fileobj = request.data.get("File")
-        desc = request.data.get("Description")
-        function = request.data.get("Function")
+        email = request.data.get("Email")["value"]
+        filename = request.data.get("Filename")["value"]
+        fileobj = request.data.get("File")["value"]
+        desc = request.data.get("Description")["value"]
+        function = request.data.get("Function")["value"]
 
         print(email, filename, fileobj, desc)
 
@@ -566,7 +566,7 @@ def send_media(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST MEDIA DATA")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")
+        email = request.data.get("Email")["value"]
 
         media = userdb.get_media(email)
 
