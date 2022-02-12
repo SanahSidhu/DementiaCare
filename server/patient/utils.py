@@ -24,7 +24,7 @@ def signup_user(request, **kwargs) -> response.JsonResponse:
         name = request.data.get("Name")
         email = request.data.get("Email")
         password = request.data.get("Password")
-        phone_num = request.data.get("Phone Number")
+        phone_num = request.data.get("PhoneNumber")
 
         print(name, email, password, phone_num)
 
