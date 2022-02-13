@@ -3,12 +3,14 @@ import { Provider } from 'react-native-paper'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { theme } from './src/core/theme'
+import MemoScreen from './src/screens/MemoScreen';
 import {
   StartScreen,
   LoginScreen,
   RegisterScreen,
   ResetPasswordScreen,
   Dashboard,
+  MainScreen,
 } from './src/screens'
 
 const Stack = createStackNavigator()
@@ -27,10 +29,14 @@ export default function App() {
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
+          <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="MemoScreen" component={MemoScreen} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}
           />
+
+
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
