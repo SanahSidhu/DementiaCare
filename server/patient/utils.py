@@ -91,14 +91,14 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         print("POST REQUEST CHECKLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")["value"]
-        text = request.data.get("Text")["value"]
-        function = request.data.get("Function")["value"]
+        email = request.data.get("Email")
+        text = request.data.get("Text")
+        function = request.data.get("Function")
 
         if function == "Add":
             userdb.insert_cl_nt_data(email, text, add=True, cl=True)
         elif function == "Remove":
-            userdb.insert_cl_nt_data(email, text, remove=True, cl=True)
+            userdb.insert_cl_nt_data(email, text[0], remove=True, cl=True)
 
         return response.JsonResponse(
             {"success_status": True},
@@ -138,7 +138,7 @@ def send_checklist_data(request, **kwargs) -> response.JsonResponse:
         print("GET REQUEST CHECKLIST")
         print("request.data:", request.data)
 
-        email = request.data.get("Email")["value"]
+        email = request.data.get("Email")
 
         record = userdb.get_cl_nt_data(email, cl=True)
 
@@ -416,9 +416,9 @@ def recv_emg_contact(request, **kwargs) -> response.JsonResponse:
 
         email = request.data.get("Email")["value"]
         contact_name = request.data.get("Name")["value"]
-        contact_num = request.data.get("Number")["value"]
+        contact_num = request.data.get("PhoneNumber")["value"]
         relation = request.data.get("Relation")["value"]
-        function = request.data.get("Function")["value"]
+        function = request.data.get("Function")
 
         em_data = {
             "Name": contact_name,

@@ -128,7 +128,7 @@ class UserData:
                 try:
                     self.db.update_one(
                         {"Email": email},
-                        {"$push": {rec}},
+                        {"$push": rec},
                     )
                 except Exception:
                     raise DataInsertionError("Error Inserting Text in Database")
@@ -138,7 +138,7 @@ class UserData:
         elif add == False and remove == True:
             if self.db.find_one({"Email": email}):
                 try:
-                    self.db.update({"Email": email}, {"$pull": {rec}})
+                    self.db.update({"Email": email}, {"$pull": rec})
                 except Exception:
                     raise DataRemovalError("Error Removing Text From Database")
             else:
@@ -156,14 +156,16 @@ class UserData:
             raise InvalidFieldError("Invalid Field Requested")
 
         if data := self.db.find(
-            {"Email", email},
+            {"Email": email},
             {
                 "_id": 0,
             },
         ):
-            docs = data[option]
+            docs = list(data)
+            rec = docs[0][option]
+            print(rec)
             json_data = response.JsonResponse(
-                docs, safe=False, status=status.HTTP_200_OK
+                rec, safe=False, status=status.HTTP_200_OK
             )
             return json_data
 
@@ -198,7 +200,7 @@ class UserData:
                 try:
                     self.db.update_one(
                         {"Email": email},
-                        {"$push": {rec}},
+                        {"$push": rec},
                     )
                 except Exception:
                     raise DataInsertionError("Error Inserting Data in Database")
@@ -208,7 +210,7 @@ class UserData:
         elif add == False and remove == True:
             if self.db.find_one({"Email": email}):
                 try:
-                    self.db.update({"Email": email}, {"$pull": {rec}})
+                    self.db.update({"Email": email}, {"$pull": rec})
                 except Exception:
                     raise DataRemovalError("Error Removing Data From Database")
             else:
@@ -228,14 +230,16 @@ class UserData:
             raise InvalidFieldError("Invalid Field Requested")
 
         if data := self.db.find(
-            {"Email", email},
+            {"Email": email},
             {
                 "_id": 0,
             },
         ):
-            docs = data[option]
+            docs = list(data)
+            rec = docs[0][option]
+            print(rec)
             json_data = response.JsonResponse(
-                docs, safe=False, status=status.HTTP_200_OK
+                rec, safe=False, status=status.HTTP_200_OK
             )
             return json_data
 
@@ -254,7 +258,7 @@ class UserData:
                 try:
                     self.db.update_one(
                         {"Email": email},
-                        {"$push": {rec}},
+                        {"$push": rec},
                     )
                 except Exception:
                     raise DataInsertionError("Error Inserting Data in Database")
@@ -264,7 +268,7 @@ class UserData:
         elif add == False and remove == True:
             if self.db.find_one({"Email": email}):
                 try:
-                    self.db.update({"Email": email}, {"$pull": {rec}})
+                    self.db.update({"Email": email}, {"$pull": rec})
                 except Exception:
                     raise DataRemovalError("Error Removing Data From Database")
             else:
@@ -275,14 +279,16 @@ class UserData:
         Func Desc
         """
         if data := self.db.find(
-            {"Email", email},
+            {"Email": email},
             {
                 "_id": 0,
             },
         ).sort("Date", -1):
-            docs = data["Media"]
+            docs = list(data)
+            rec = docs[0]["Media"]
+            print(rec)
             json_data = response.JsonResponse(
-                docs, safe=False, status=status.HTTP_200_OK
+                rec, safe=False, status=status.HTTP_200_OK
             )
             return json_data
 
