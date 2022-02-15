@@ -95,6 +95,10 @@ def recv_checklist_data(request, **kwargs) -> response.JsonResponse:
         text = request.data.get("Text")
         function = request.data.get("Function")
 
+        print(email)
+        print("TEXT: ", text)
+        print("FUNCTION: ", function)
+
         if function == "Add":
             userdb.insert_cl_nt_data(email, text, add=True, cl=True)
         elif function == "Remove":
