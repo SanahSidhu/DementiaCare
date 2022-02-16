@@ -21,6 +21,7 @@ from django.contrib import admin
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("patient/", include("patient.urls")),
+    path("caregiver/", include("caregiver.urls")),
 ]
 
 if settings.DEBUG:
