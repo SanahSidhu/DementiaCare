@@ -1,8 +1,5 @@
 # DementiaCare
-Submission for the DeveloperWeek Hackathon - DementiaCareApp
-
-# Dementia-Care
-Submission for Hack The League 2022  
+DementiaCare, your everyday buddy, is an app that helps manage the difficulties faced by early stage dementia patients in their day-to-day lives.
 
 ## 📌 Prerequisites
 
@@ -33,7 +30,7 @@ $ expo start or $yarn start
 This will open Expo Developer Tools, a browser-based graphical UI for quickly setting in where you can run the stimulator on web, iOS or android.
 
 
-## ScreenShots for DementiaCare Application 
+## ScreenShots
 
 ![WhatsApp Image 2022-02-13 at 16 08 05](https://user-images.githubusercontent.com/82082398/153750890-0f4d4fb5-e5ae-405f-92ff-3bbaf2ef70e2.jpeg)
 ![WhatsApp Image 2022-02-13 at 16 07 54](https://user-images.githubusercontent.com/82082398/153750887-7a6884b0-17a9-4069-8ca8-38fb996fdfa6.jpeg)
