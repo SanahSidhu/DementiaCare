@@ -17,10 +17,9 @@ import * as Calendar from 'expo-calendar';
 import * as Localization from 'expo-localization';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { v4 as uuidv4 } from 'uuid';
-import { useKeyboardHeight } from '@calendar/hooks';
-import { useStore } from '@calendar/store';
-import { Routes } from '@calendar/navigation';
+import useKeyboardHeight from '../../hooks/useKeyboardHeight';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Routes from '../../navigation/routes';
 
 const { width: vw } = Dimensions.get('window');
 // moment().format('YYYY/MM/DD')
@@ -55,12 +54,12 @@ const styles = StyleSheet.create({
   },
   learn: {
     height: 23,
-    width: 51,
-    backgroundColor: '#F8D557',
+    width: 80,
+    backgroundColor: '#7ca8f2',
     justifyContent: 'center',
     borderRadius: 5
   },
-  design: {
+  medication: {
     height: 23,
     width: 59,
     backgroundColor: '#62CCFB',
@@ -68,10 +67,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 7
   },
-  medication: {
+  readBook: {
     height: 23,
-    width: 83,
-    backgroundColor: '#6d91cf',
+    width: 150,
+    backgroundColor: '#6ea1f5',
     justifyContent: 'center',
     borderRadius: 5,
     marginRight: 7
@@ -255,7 +254,7 @@ export default function CreateTask({ navigation, route }) {
         onCancel={hideDateTimePicker}
         mode="time"
         date={new Date()}
-        isLightModeEnabled
+        isDarkModeEnabled
       />
 
       <SafeAreaView style={styles.container}>
@@ -324,7 +323,7 @@ export default function CreateTask({ navigation, route }) {
                 style={styles.title}
                 onChangeText={setTaskText}
                 value={taskText}
-                placeholder="What do you need to do?"
+                placeholder="Title / Event"
               />
               <Text
                 style={{
@@ -336,14 +335,14 @@ export default function CreateTask({ navigation, route }) {
                 Suggestion
               </Text>
               <View style={{ flexDirection: 'row' }}>
-                <View style={styles.medication}>
+                <View style={styles.readBook}>
                   <Text style={{ textAlign: 'center', fontSize: 14 }}>
-                    Medication
+                    Doctor's Appointment
                   </Text>
                 </View>
-                <View style={styles.design}>
+                <View style={styles.learn}>
                   <Text style={{ textAlign: 'center', fontSize: 14 }}>
-                    Lunch
+                    Medication
                   </Text>
                 </View>
               </View>

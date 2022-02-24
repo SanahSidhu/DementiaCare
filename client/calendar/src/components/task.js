@@ -55,7 +55,18 @@ export default class Task extends React.Component {
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View>
+        <View
+          style={[
+            styles.container,
+            {
+              ...Platform.select({
+                android: {
+                  // paddingTop: shouldMove ? 240 : null,
+                }
+              })
+            }
+          ]}
+        >
           <View style={styles.cardMain}>
             <View style={styles.card}>{children}</View>
             <Pressable

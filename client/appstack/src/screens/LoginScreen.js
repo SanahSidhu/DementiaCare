@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -23,7 +23,38 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.navigate('MainScreen');
+
+    let url;
+    url = `https://b9df-120-57-213-54.ngrok.io/patient/login`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Email: email,
+        Password: password,
+        returnSecureToken: true,
+      }),
+    })
+      .then((res) => {
+        if (res) {
+          return res.data;
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = 'Authentication failed!';
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setEmail('');
+        setPassword('');
+      });
+
+      navigation.navigate('MainScreen');
   }
 
   return (
@@ -54,8 +85,7 @@ export default function LoginScreen({ navigation }) {
       />
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
-        >
+          onPress={() => navigation.navigate('ResetPasswordScreen')}>
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>

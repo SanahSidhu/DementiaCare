@@ -41,6 +41,8 @@ export default class Dashboard extends Component{
         navigate('PhotoScreen');
     } else if(item.name === "Notes") {
         navigate('MemoScreen');
+    } else if(item.name === "Contacts") {
+        navigate('Contacts');
     } else {
         Alert.alert('Message', 'Item clicked. '+item.name);
     }

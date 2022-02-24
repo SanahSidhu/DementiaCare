@@ -23,8 +23,8 @@ export default class PhotoScreen extends Component {
     super(props);
     this.state = {
       data: [
-        {id:1, title: "Lorem ipsum dolor",                  time:"2018-08-01 12:15 pm", image:"https://via.placeholder.com/400x200/FFB6C1/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean  ligula..."},
-        {id:2, title: "Sit amet, consectetuer",             time:"2018-08-12 12:00 pm", image:"https://via.placeholder.com/400x200/7B68EE/000000", description:"Lorem  dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."} ,
+        {id:1, title: "After Marriage",                  time:"1974-08-01", image:"https://daily.jstor.org/wp-content/uploads/2016/08/wedding_party_1050x700.jpg", description:"The person sitting on the right of the chair is you, and right is John(Husband). Left corner on photo is Mary (John's Sister). Next to you is your sister (Beth)."},
+        {id:2, title: "Your House",             time:"2018-03-25 12:00 pm", image:"https://www.mydomaine.com/thmb/L2QLQb1AoAkpuTqmyZmVnpeDEoc=/2121x1193/smart/filters:no_upscale()/GettyImages-469432252-3a4c307c981244e186f129f24cc8c89f.jpg"} ,
         {id:3, title: "Dipiscing elit. Aenean ",            time:"2017-08-05 12:21 pm", image:"https://via.placeholder.com/400x200/000080/000000", description:"Lorem ipsum dolor sit , consectetuer  elit. Aenean commodo ligula..."}, 
         {id:4, title: "Commodo ligula eget dolor.",         time:"2015-08-12 12:00 pm", image:"https://via.placeholder.com/400x200/48D1CC/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."}, 
         {id:5, title: "Aenean massa. Cum sociis",           time:"2013-06-12 12:11 pm", image:"https://via.placeholder.com/400x200/9370DB/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  commodo ligula..."}, 
@@ -35,6 +35,8 @@ export default class PhotoScreen extends Component {
       ]
     };
   }
+
+  
 
   render() {
     const { navigate } = this.props.navigation;    

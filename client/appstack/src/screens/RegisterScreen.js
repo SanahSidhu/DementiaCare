@@ -11,23 +11,61 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
+import { phonenoValidator } from '../helpers/phonenoValidator';
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [phoneno, setPhoneno] = useState({ value: '', error: '' })
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError || nameError) {
+    const phonenoError = phonenoValidator(phoneno.value)
+    if (emailError || passwordError || nameError ) {
       setName({ ...name, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
+      setPhoneno({ ...phoneno, error: phonenoError })
       return
     }
     navigation.navigate('LoginScreen')
+
+    let url;
+    url = `https://d2a4-120-57-216-248.ngrok.io/patient/signup`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Email: email,
+        Password: password,
+        Name: name,
+        PhoneNumber: phoneno,
+        returnSecureToken: true,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = 'Authentication failed!';
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setName('');
+        setPhoneno('');
+        setEmail('');
+        setPassword('');
+      });
   }
 
   return (
@@ -64,12 +102,12 @@ export default function RegisterScreen({ navigation }) {
         secureTextEntry
       />
       <TextInput
-        label="Emergency Contact"
+        label="Phoneno"
         returnKeyType="next"
-        value={name.value}
-        onChangeText={(text) => setName({ value: text, error: '' })}
-        error={!!name.error}
-        errorText={name.error}
+        value={phoneno.value}
+        onChangeText={(text) => setPhoneno({ value: text, error: 'cannot be empty' })}
+        error={!!phoneno.error}
+        errorText={phoneno.error}
       />
       <Button
         mode="contained"

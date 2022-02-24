@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import BackContainer from '../components/BackContainer';
+import BackButton from '../components/BackButton';
+import { useNavigation } from '@react-navigation/native';
+import { theme } from '../core/theme';
+import Header from '../components/Header';
 import {
   StyleSheet,
   Text,
@@ -48,16 +53,19 @@ export default class Contacts extends Component {
               <Text style={styles.time}>{item.date} {item.time}</Text>
             </View>
           </View>
-          <Image style={[styles.icon, { marginRight: 50 }]} source={{uri: callIcon}} />
+          <Image style={[styles.icon]} source={{uri: callIcon}} />
         </View>
       </TouchableOpacity>
     );
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return(
+      <BackContainer>
+      <BackButton goBack={this.props.navigation.goBack}/>
+      <Header>Contacts</Header>
       <View style={{ flex: 1 }} >
-        <h1>Contacts</h1>
         <FlatList 
           extraData={this.state}
           data={this.state.calls}
@@ -66,6 +74,7 @@ export default class Contacts extends Component {
           }}
           renderItem={this.renderItem}/>
       </View>
+      </BackContainer>
     );
   }
 }
@@ -75,7 +84,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#dcdcdc',
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     padding: 10,
     justifyContent: 'space-between',
@@ -116,5 +125,6 @@ const styles = StyleSheet.create({
   icon:{
     height: 28,
     width: 28, 
+    marginRight: 5,
   }
 });

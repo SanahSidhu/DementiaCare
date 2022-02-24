@@ -18,9 +18,9 @@ import * as Localization from 'expo-localization';
 
 import CalendarStrip from 'react-native-calendar-strip';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Task } from '@calendar/components';
-import { useStore } from '@calendar/store';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Task from '../../components/task';
+import useStore from '../../contexts/store';
 
 const styles = StyleSheet.create({
   taskListContent: {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     zIndex: 999
   },
   deleteButton: {
-    backgroundColor: '#ff6347',
+    backgroundColor: '#305dc7',
     width: 100,
     height: 38,
     alignSelf: 'center',
@@ -96,25 +96,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 20
   },
-  learn: {
+  medication: {
     height: 23,
-    width: 51,
-    backgroundColor: '#F8D557',
+    width: 90,
+    backgroundColor: '#6ea1f5',
     justifyContent: 'center',
     borderRadius: 5
   },
-  design: {
+  readBook: {
     height: 23,
-    width: 59,
-    backgroundColor: '#62CCFB',
-    justifyContent: 'center',
-    borderRadius: 5,
-    marginRight: 7
-  },
-  medication: {
-    height: 23,
-    width: 83,
-    backgroundColor: '#6d91cf',
+    width: 150,
+    backgroundColor: '#6ea1f5',
     justifyContent: 'center',
     borderRadius: 5,
     marginRight: 7
@@ -377,15 +369,13 @@ export default function Home({ navigation }) {
               Suggestion
             </Text>
             <View style={{ flexDirection: 'row' }}>
-              <View style={styles.medication}>
+              <View style={styles.readBook}>
                 <Text style={{ textAlign: 'center', fontSize: 14 }}>
-                  Medication
+                  Doctor's Appointment
                 </Text>
               </View>
-              <View style={styles.design}>
-                <Text style={{ textAlign: 'center', fontSize: 14 }}>
-                  Lunch
-                </Text>
+              <View style={styles.medication}>
+                <Text style={{ textAlign: 'center', fontSize: 14 }}> Medication </Text>
               </View>
             </View>
             <View style={styles.notesContent} />
