@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
-import Task from '../components/Task';
 import BackButton from '../components/BackButton';
 import BackContainer from '../components/BackContainer';
 import Header from '../components/Header';
+import CheckTask from '../components/CheckTask';
+import LoginScreen from './LoginScreen';
 
 export default function CheckList({navigation}) {
   const [task, setTask] = useState();
@@ -13,12 +14,72 @@ export default function CheckList({navigation}) {
     Keyboard.dismiss();
     setTaskItems([...taskItems, task])
     setTask(null);
+
+    let url;
+    url = `https://b9df-120-57-213-54.ngrok.io/patient/checklist`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Text: task,
+        Function: 'Add',
+        returnSecureToken: true,
+      }),
+    })
+      .then((res) => {
+        if (res) {
+          return res.data;
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = 'Task not stored';
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setTask('');
+        setTaskItems('');
+      });
+
   }
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy)
+    let url;
+    url = `https://b9df-120-57-213-54.ngrok.io/patient/checklist`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Text: taskItems,
+        Function: 'Remove',
+        returnSecureToken: true,
+      }),
+    })
+      .then((res) => {
+        if (res) {
+          return res.data;
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = 'Task not stored';
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setTask('');
+        setTaskItems('');
+      });
   }
 
   return (
@@ -33,17 +94,14 @@ export default function CheckList({navigation}) {
           {taskItems.map((item, index) => {
               return (
                 <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
-                  <Task text={item} /> 
+                  <CheckTask text={item} /> 
                 </TouchableOpacity>
               )
             })
           }
         </View>
-      </View>
-        
+      </View>   
       </ScrollView>
-
-
     
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height" }

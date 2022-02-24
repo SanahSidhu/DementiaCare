@@ -1,56 +1,72 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-
-const Task = (props) => {
-
-  return (
-    <View style={styles.item}>
-      <View style={styles.itemLeft}>
-        <View style={styles.square}></View>
-        <Text style={styles.itemText}>{props.text}</Text>
-      </View>
-      <View><Image style={styles.tinyLogo} source={{uri: "https://img.icons8.com/material-outlined/344/filled-trash.png"}}/></View>
-    </View>
-  )
-}
+import {
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: '#FFF',
-    padding: 15,
-    borderRadius: 10,
-    flexDirection: 'row',
+  cardMain: {
+    position: 'absolute',
+    top: 100,
+    width: 327,
+    alignSelf: 'center',
+    zIndex: 1000,
+    elevation: 1000,
+    paddingBottom: 54
+  },
+  card: {
+    width: 327,
+    borderRadius: 20,
+    backgroundColor: '#ffffff',
+    alignSelf: 'center'
+  },
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  btnContainer: ({ pressed }) => ({
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: '#FFFFFF',
+    height: 44,
+    borderRadius: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  itemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap'
-  },
-  square: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#55BCF6',
-    opacity: 0.4,
-    borderRadius: 5,
-    marginRight: 15,
-  },
-  itemText: {
-    maxWidth: '80%',
-  },
-  circular: {
-    width: 12,
-    height: 12,
-    borderColor: '#55BCF6',
-    borderWidth: 2,
-    borderRadius: 5,
-  },
-    tinyLogo: {
-    width: 25,
-    height: 25,
-  },
+    opacity: pressed ? 0.5 : 1
+  }),
+  textContainer: { textAlign: 'center', fontSize: 17, fontWeight: '500' }
 });
 
-export default Task;
+// = ({ isModalVisible, children }) =>
+export default class Task extends React.Component {
+  render() {
+    const { isModalVisible, children, setModalVisible } = this.props;
+    return (
+      <Modal
+        animationType="fade"
+        transparent
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View>
+          <View style={styles.cardMain}>
+            <View style={styles.card}>{children}</View>
+            <Pressable
+              style={styles.btnContainer}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.textContainer}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+}

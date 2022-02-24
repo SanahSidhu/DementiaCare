@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { theme } from './src/core/theme'
 import MemoScreen from './src/screens/MemoScreen';
+import CalendarScreen from './src/screens/Calendar';
 import {
   StartScreen,
   LoginScreen,
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
           <Stack.Screen name="MemoScreen" component={MemoScreen} />
+          <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
           <Stack.Screen
             name="ResetPasswordScreen"
             component={ResetPasswordScreen}

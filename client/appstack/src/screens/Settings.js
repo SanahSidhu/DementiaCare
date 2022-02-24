@@ -13,7 +13,7 @@ export default function Settings({ navigation }) {
       <Button
         mode="outlined"
         onPress={() =>
-          navigation.navigate('')}
+          navigation.navigate('StartScreen')}
       >
         Logout
       </Button>
