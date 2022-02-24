@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "patient.apps.PatientConfig",
+    "caregiver.apps.CaregiverConfig",
     "rest_framework",
     "corsheaders",
     "storages",
