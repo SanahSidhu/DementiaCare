@@ -5,8 +5,10 @@ import BackContainer from '../components/BackContainer';
 import Header from '../components/Header';
 import CheckTask from '../components/CheckTask';
 import LoginScreen from './LoginScreen';
+const STORAGE_KEY = '@save_email';
 
 export default function CheckList({navigation}) {
+  const [email, setEmail] = useState();
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
@@ -46,6 +48,22 @@ export default function CheckList({navigation}) {
       });
 
   }
+
+  const readData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+
+      if (userEmail !== null) {
+        setEmail(userEmail)
+      }
+    } catch (e) {
+      alert('Failed to fetch the email from storage')
+    }
+  }
+
+  useEffect(() => {
+  readData()
+  }, [])
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -10,12 +11,16 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import axios from "axios";
+const STORAGE_KEY = '@save_email';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [isLoading, setIsLoading] = useState(false);
+  const baseUrl = ' ';
 
-  const onLoginPressed = () => {
+  const onLoginPressed = async (event) => {
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
     if (emailError || passwordError) {
@@ -23,38 +28,71 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-
-    let url;
-    url = `https://b9df-120-57-213-54.ngrok.io/patient/login`;
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Email: email,
-        Password: password,
-        returnSecureToken: true,
-      }),
-    })
-      .then((res) => {
-        if (res) {
-          return res.data;
-        } else {
-          return res.json().then((data) => {
-            let errorMessage = 'Authentication failed!';
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${baseUrl}/patient/login`, {
+        email,
+        password,
+      });
+      if (response.status === 201) {
+        alert(` You have created: ${JSON.stringify(response.data)}`);
+        setIsLoading(false);
         setEmail('');
         setPassword('');
-      });
+      } else {
+        throw new Error("An error has occurred");
+      }
+    } catch (error) {
+      alert("An error has occurred");
+      setIsLoading(false);
+    }
+
+    // let url;
+    // url = `https://b9df-120-57-213-54.ngrok.io/patient/login`;
+    // fetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     Email: email,
+    //     Password: password,
+    //     returnSecureToken: true,
+    //   }),
+    // })
+    //   .then((res) => {
+    //     if (res) {
+    //       return res.data;
+    //     } else {
+    //       return res.json().then((data) => {
+    //         let errorMessage = 'Authentication failed!';
+    //         throw new Error(errorMessage);
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //     setEmail('');
+    //     setPassword('');
+    //   });
 
       navigation.navigate('MainScreen');
+  }
+
+  const saveData = async () => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, email)
+      alert('Data successfully saved')
+    } catch (e) {
+      alert('Failed to save the data to the storage')
+    }
+  }
+
+  const storeData = () => {
+    if (!email) return
+    saveData(email)
+    setEmail('')
   }
 
   return (
@@ -89,6 +127,9 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
+      <Button mode="contained" onPress={storeData}>
+        Store 
+      </Button>
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
