@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import BackButton from '../components/BackButton';
 import BackContainer from '../components/BackContainer';
@@ -11,6 +12,23 @@ export default function CheckList({navigation}) {
   const [email, setEmail] = useState();
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+  const baseUrl = ' ';
+
+  const readData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+      if (userEmail !== null) {
+        alert('email fetched')
+        setEmail(userEmail)
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+  useEffect(() => {
+    readData()
+  }, [])
 
   const handleAddTask = () => {
     Keyboard.dismiss();
@@ -18,7 +36,7 @@ export default function CheckList({navigation}) {
     setTask(null);
 
     let url;
-    url = `https://b9df-120-57-213-54.ngrok.io/patient/checklist`;
+    url = `${baseUrl}/patient/checklist`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -26,6 +44,7 @@ export default function CheckList({navigation}) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        Email: email,
         Text: task,
         Function: 'Add',
         returnSecureToken: true,
@@ -49,28 +68,13 @@ export default function CheckList({navigation}) {
 
   }
 
-  const readData = async () => {
-    try {
-      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
-
-      if (userEmail !== null) {
-        setEmail(userEmail)
-      }
-    } catch (e) {
-      alert('Failed to fetch the email from storage')
-    }
-  }
-
-  useEffect(() => {
-  readData()
-  }, [])
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy)
     let url;
-    url = `https://b9df-120-57-213-54.ngrok.io/patient/checklist`;
+    url = `${baseUrl}/patient/checklist`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -78,6 +82,7 @@ export default function CheckList({navigation}) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        Email: email,
         Text: taskItems,
         Function: 'Remove',
         returnSecureToken: true,

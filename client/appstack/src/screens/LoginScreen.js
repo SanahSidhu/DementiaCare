@@ -15,16 +15,14 @@ import axios from "axios";
 const STORAGE_KEY = '@save_email';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState()
   const [password, setPassword] = useState({ value: '', error: '' })
   const [isLoading, setIsLoading] = useState(false);
   const baseUrl = ' ';
 
   const onLoginPressed = async (event) => {
-    const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
+    if (passwordError) {
       setPassword({ ...password, error: passwordError })
       return
     }
@@ -81,16 +79,36 @@ export default function LoginScreen({ navigation }) {
   }
 
   const saveData = async () => {
+    
     try {
       await AsyncStorage.setItem(STORAGE_KEY, email)
-      alert('Data successfully saved')
+      alert('Email successfully saved')
     } catch (e) {
       alert('Failed to save the data to the storage')
     }
   }
 
-  const storeData = () => {
+    const readData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+
+      if (userEmail !== null) {
+        setEmail(userEmail)
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+  useEffect(() => {
+    readData()
+  }, [])
+
+  const onChangeText = userEmail => setEmail(userEmail)
+
+  const onSubmitEditing = () => {
     if (!email) return
+
     saveData(email)
     setEmail('')
   }
@@ -103,10 +121,8 @@ export default function LoginScreen({ navigation }) {
       <TextInput
         label="Email"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        onChangeText={onChangeText}
+        onSubmitEditing={onSubmitEditing}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
@@ -127,9 +143,6 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={storeData}>
-        Store 
-      </Button>
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
