@@ -125,8 +125,7 @@ else:
 if DEBUG:
     CACHES = {
         "default": {
-            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-            "LOCATION": "/home/nvombat/Desktop/DementiaCare/server/cache",
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
         }
     }
 else:
