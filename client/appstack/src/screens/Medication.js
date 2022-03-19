@@ -13,7 +13,9 @@ export default function Medication({navigation}) {
   const [isLoading, setLoading] = useState(true);
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+
   const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+
   const [data, setData] = useState([]);
   console.log(data);
 

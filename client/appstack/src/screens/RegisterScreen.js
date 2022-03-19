@@ -35,11 +35,7 @@ export default function RegisterScreen({ navigation }) {
     navigation.navigate('LoginScreen')
 
     let url;
-<<<<<<< Updated upstream
-    url = `https://d2a4-120-57-216-248.ngrok.io/patient/signup`;
-=======
     url = `https://8503-122-174-132-140.ngrok.io/patient/signup`;
->>>>>>> Stashed changes
     fetch(url, {
       method: 'POST',
       headers: {

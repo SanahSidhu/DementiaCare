@@ -14,12 +14,13 @@ import { nameValidator } from '../helpers/nameValidator'
 import { phonenoValidator } from '../helpers/phonenoValidator';
 
 export default function EmergencyForm({ navigation }) {
+  const [email, setEmail] = useState();
+  const [isLoading, setLoading] = useState(true);
   const [name, setName] = useState({ value: '', error: '' })
   const [relation, setRelation] = useState({ value: '', error: '' })
   const [phoneno, setPhoneno] = useState({ value: '', error: '' })
-<<<<<<< Updated upstream
-=======
   const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+
   const [data, setData] = useState([]);
   console.log(data);
 
@@ -50,8 +51,6 @@ export default function EmergencyForm({ navigation }) {
       .finally(() => setLoading(false));
   }, []);
 
->>>>>>> Stashed changes
-
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const relationError = relationValidator(relation.value)
@@ -69,7 +68,7 @@ export default function EmergencyForm({ navigation }) {
     // Linking.openURL(`tel:${JSON.stringify(phoneno.value)}`)
 
     let url;
-    url = `https://b9df-120-57-213-54.ngrok.io/patient/emergencycontacts`;
+    url = `${baseUrl}/patient/emergencycontacts`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -77,6 +76,7 @@ export default function EmergencyForm({ navigation }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        Email: email,
         Name: name,
         Relation: relation,
         PhoneNumber: phoneno,

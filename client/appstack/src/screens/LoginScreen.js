@@ -18,11 +18,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState({ value: '', error: '' })
   const [isLoading, setIsLoading] = useState(false);
-<<<<<<< Updated upstream
-  const baseUrl = ' ';
-=======
   const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
->>>>>>> Stashed changes
 
   const onLoginPressed = async (event) => {
     const passwordError = passwordValidator(password.value)
@@ -30,7 +26,6 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-<<<<<<< Updated upstream
     setIsLoading(true);
     try {
       const response = await axios.post(`${baseUrl}/patient/login`, {
@@ -40,7 +35,6 @@ export default function LoginScreen({ navigation }) {
       if (response.status === 201) {
         alert(` You have created: ${JSON.stringify(response.data)}`);
         setIsLoading(false);
-=======
   //   setIsLoading(true);
   //   try {
   //     const response = await axios.post(`${baseUrl}/patient/login`, {
@@ -61,7 +55,9 @@ export default function LoginScreen({ navigation }) {
   //   }
 
     let url;
+
     url = `https://8503-122-174-132-140.ngrok.io/patient/login`;
+
     fetch(url, {
       method: 'POST',
       headers: {
@@ -86,46 +82,10 @@ export default function LoginScreen({ navigation }) {
       })
       .catch((error) => {
         console.error(error);
->>>>>>> Stashed changes
+
         setEmail('');
         setPassword('');
-      } else {
-        throw new Error("An error has occurred");
-      }
-    } catch (error) {
-      alert("An error has occurred");
-      setIsLoading(false);
-    }
-
-    // let url;
-    // url = `https://b9df-120-57-213-54.ngrok.io/patient/login`;
-    // fetch(url, {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     Email: email,
-    //     Password: password,
-    //     returnSecureToken: true,
-    //   }),
-    // })
-    //   .then((res) => {
-    //     if (res) {
-    //       return res.data;
-    //     } else {
-    //       return res.json().then((data) => {
-    //         let errorMessage = 'Authentication failed!';
-    //         throw new Error(errorMessage);
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setEmail('');
-    //     setPassword('');
-    //   });
+      });
 
       navigation.navigate('MainScreen');
   }

@@ -40,6 +40,8 @@ export default class Dashboard extends Component{
 <<<<<<< Updated upstream
     } else if(item.name === "Photos") {
         navigate('PhotoScreen');
+    } else if(item.name === "Medication") {
+        navigate('Medication');
     } else if(item.name === "Notes") {
         navigate('MemoScreen');
     } else if(item.name === "Contacts") {
