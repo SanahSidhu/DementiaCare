@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, Linking, Platform, View, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-paper'
@@ -18,7 +19,8 @@ export default function EmergencyForm({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [relation, setRelation] = useState({ value: '', error: '' })
   const [phoneno, setPhoneno] = useState({ value: '', error: '' })
-  const baseUrl = 'https://9f9e-120-57-218-232.ngrok.io';
+  const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+
   const [data, setData] = useState([]);
   console.log(data);
 
@@ -40,7 +42,7 @@ export default function EmergencyForm({ navigation }) {
 
   useEffect(() => {
     let url;
-    url = `${baseUrl}/patient/checklist?Email=${email}`;
+    url = `${baseUrl}/patient/emergencycontacts?Email=${email}`;
   alert('Get Request Sent')
   fetch(url)
       .then((response) => response.json())
@@ -48,7 +50,6 @@ export default function EmergencyForm({ navigation }) {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)

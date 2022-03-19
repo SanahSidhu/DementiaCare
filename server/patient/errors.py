@@ -1,4 +1,10 @@
-from core.errorfactory import AuthenticationErrors, AWSErrors, DataErrors
+from core.errorfactory import (
+    AuthenticationErrors,
+    ChecklistErrors,
+    NotesErrors,
+    DataErrors,
+    AWSErrors,
+)
 
 
 class InvalidUserCredentialsError(AuthenticationErrors):
@@ -6,6 +12,14 @@ class InvalidUserCredentialsError(AuthenticationErrors):
 
 
 class UserDoesNotExistError(AuthenticationErrors):
+    ...
+
+
+class ChecklistDataEmptyError(ChecklistErrors):
+    ...
+
+
+class NotesDataEmptyError(NotesErrors):
     ...
 
 

@@ -1,4 +1,28 @@
+class EmergencyContactErrors(Exception):
+    ...
+
+
 class AuthenticationErrors(Exception):
+    ...
+
+
+class ChecklistErrors(Exception):
+    ...
+
+
+class InventoryErrors(Exception):
+    ...
+
+
+class MedlistErrors(Exception):
+    ...
+
+
+class NotesErrors(Exception):
+    ...
+
+
+class MediaErrors(Exception):
     ...
 
 
