@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackContainer from '../components/BackContainer';
 import BackButton from '../components/BackButton';
 import Header from '../components/Header';
@@ -17,7 +18,82 @@ import {
 } from 'react-native';
 
 export default class PhotoScreen extends Component {
+<<<<<<< Updated upstream
 
+=======
+  // const [email, setEmail] = useState();
+  // const [isLoading, setLoading] = useState(true);
+  // const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+  // const [data, setData] = useState([]);
+  // console.log(data);
+
+// const readData = async () => {
+//     try {
+//       const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+//       if (userEmail !== null) {
+//         alert('email fetched')
+//         setEmail(userEmail)
+//       }
+//     } catch (e) {
+//       alert('Failed to fetch the data from storage')
+//     }
+//   }
+
+//   useEffect(() => {
+//     readData()
+//   }, [])
+
+// useEffect(() => {
+//     let url;
+//     url = `${baseUrl}/patient/photos?Email=${email}`;
+//   alert('Get Request Sent')
+//   fetch(url)
+//       .then((response) => response.json())
+//       .then((json) => setData(json))
+//       .catch((error) => console.error(error))
+//       .finally(() => setLoading(false));
+//   }, []);
+
+//   const handleAddTask = () => {
+//     Keyboard.dismiss();
+//     setTaskItems([...taskItems, task])
+//     setTask(null);
+
+//     let url;
+//     url = `${baseUrl}/patient/photos`;
+
+
+//     fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         Accept: 'application/json',
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         Email: email,
+//         Text: task,
+//         Function: 'Add',
+//         returnSecureToken: true,
+//       }),
+//     })
+//       .then((res) => {
+//         if (res) {
+//           return res.data;
+//         } else {
+//           return res.json().then((data) => {
+//             let errorMessage = 'Task not stored';
+//             throw new Error(errorMessage);
+//           });
+//         }
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//         setTask('');
+//         setTaskItems('');
+//       });
+
+//   }
+>>>>>>> Stashed changes
 
   constructor(props) {
     super(props);

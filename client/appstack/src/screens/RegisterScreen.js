@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -34,7 +35,11 @@ export default function RegisterScreen({ navigation }) {
     navigation.navigate('LoginScreen')
 
     let url;
+<<<<<<< Updated upstream
     url = `https://d2a4-120-57-216-248.ngrok.io/patient/signup`;
+=======
+    url = `https://8503-122-174-132-140.ngrok.io/patient/signup`;
+>>>>>>> Stashed changes
     fetch(url, {
       method: 'POST',
       headers: {

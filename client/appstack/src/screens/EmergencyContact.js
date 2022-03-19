@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, Linking, Platform, View, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native-paper'
@@ -16,6 +17,40 @@ export default function EmergencyForm({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [relation, setRelation] = useState({ value: '', error: '' })
   const [phoneno, setPhoneno] = useState({ value: '', error: '' })
+<<<<<<< Updated upstream
+=======
+  const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+  const [data, setData] = useState([]);
+  console.log(data);
+
+  const readData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+      if (userEmail !== null) {
+        alert('email fetched')
+        setEmail(userEmail)
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+  useEffect(() => {
+    readData()
+  }, [])
+
+  useEffect(() => {
+    let url;
+    url = `${baseUrl}/patient/emergencycontacts?Email=${email}`;
+  alert('Get Request Sent')
+  fetch(url)
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
+>>>>>>> Stashed changes
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
