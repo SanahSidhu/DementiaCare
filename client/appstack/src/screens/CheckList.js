@@ -10,9 +10,13 @@ const STORAGE_KEY = '@save_email';
 
 export default function CheckList({navigation}) {
   const [email, setEmail] = useState();
+  const [isLoading, setLoading] = useState(true);
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
-  const baseUrl = ' ';
+  const baseUrl = 'https://9f9e-120-57-218-232.ngrok.io';
+  const [data, setData] = useState([]);
+  console.log(data);
+
 
   const readData = async () => {
     try {
@@ -30,6 +34,18 @@ export default function CheckList({navigation}) {
     readData()
   }, [])
 
+
+  useEffect(() => {
+    let url;
+    url = `${baseUrl}/patient/checklist?Email=${email}`;
+  alert('Get Request Sent')
+  fetch(url)
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleAddTask = () => {
     Keyboard.dismiss();
     setTaskItems([...taskItems, task])
@@ -37,6 +53,8 @@ export default function CheckList({navigation}) {
 
     let url;
     url = `${baseUrl}/patient/checklist`;
+
+
     fetch(url, {
       method: 'POST',
       headers: {
@@ -75,6 +93,20 @@ export default function CheckList({navigation}) {
     setTaskItems(itemsCopy)
     let url;
     url = `${baseUrl}/patient/checklist`;
+
+    fetch(url)
+      .then(data => {
+      if (!data.ok) {
+        throw Error(data.status);
+       }
+       return data.json();
+      }).then(update => {
+      console.log(update);
+      Email: email
+      }).catch(e => {
+      console.log(e);
+      });
+
     fetch(url, {
       method: 'POST',
       headers: {

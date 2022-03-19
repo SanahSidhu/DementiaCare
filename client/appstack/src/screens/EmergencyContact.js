@@ -13,9 +13,42 @@ import { nameValidator } from '../helpers/nameValidator'
 import { phonenoValidator } from '../helpers/phonenoValidator';
 
 export default function EmergencyForm({ navigation }) {
+  const [email, setEmail] = useState();
+  const [isLoading, setLoading] = useState(true);
   const [name, setName] = useState({ value: '', error: '' })
   const [relation, setRelation] = useState({ value: '', error: '' })
   const [phoneno, setPhoneno] = useState({ value: '', error: '' })
+  const baseUrl = 'https://9f9e-120-57-218-232.ngrok.io';
+  const [data, setData] = useState([]);
+  console.log(data);
+
+  const readData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
+      if (userEmail !== null) {
+        alert('email fetched')
+        setEmail(userEmail)
+      }
+    } catch (e) {
+      alert('Failed to fetch the data from storage')
+    }
+  }
+
+  useEffect(() => {
+    readData()
+  }, [])
+
+  useEffect(() => {
+    let url;
+    url = `${baseUrl}/patient/checklist?Email=${email}`;
+  alert('Get Request Sent')
+  fetch(url)
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
@@ -34,7 +67,7 @@ export default function EmergencyForm({ navigation }) {
     // Linking.openURL(`tel:${JSON.stringify(phoneno.value)}`)
 
     let url;
-    url = `https://b9df-120-57-213-54.ngrok.io/patient/emergencycontacts`;
+    url = `${baseUrl}/patient/emergencycontacts`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -42,6 +75,7 @@ export default function EmergencyForm({ navigation }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        Email: email,
         Name: name,
         Relation: relation,
         PhoneNumber: phoneno,

@@ -34,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
     navigation.navigate('LoginScreen')
 
     let url;
-    url = `https://d2a4-120-57-216-248.ngrok.io/patient/signup`;
+    url = `https://9f9e-120-57-218-232.ngrok.io/patient/signup`;
     fetch(url, {
       method: 'POST',
       headers: {
