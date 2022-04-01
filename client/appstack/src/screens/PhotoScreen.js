@@ -18,28 +18,27 @@ import {
 
 export default class PhotoScreen extends Component {
 
-
   constructor(props) {
     super(props);
     this.state = {
       data: [
         {id:1, title: "After Marriage",                  time:"1974-08-01", image:"https://daily.jstor.org/wp-content/uploads/2016/08/wedding_party_1050x700.jpg", description:"The person sitting on the right of the chair is you, and right is John(Husband). Left corner on photo is Mary (John's Sister). Next to you is your sister (Beth)."},
         {id:2, title: "Your House",             time:"2018-03-25 12:00 pm", image:"https://www.mydomaine.com/thmb/L2QLQb1AoAkpuTqmyZmVnpeDEoc=/2121x1193/smart/filters:no_upscale()/GettyImages-469432252-3a4c307c981244e186f129f24cc8c89f.jpg"} ,
-        {id:3, title: "Dipiscing elit. Aenean ",            time:"2017-08-05 12:21 pm", image:"https://via.placeholder.com/400x200/000080/000000", description:"Lorem ipsum dolor sit , consectetuer  elit. Aenean commodo ligula..."}, 
-        {id:4, title: "Commodo ligula eget dolor.",         time:"2015-08-12 12:00 pm", image:"https://via.placeholder.com/400x200/48D1CC/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."}, 
-        {id:5, title: "Aenean massa. Cum sociis",           time:"2013-06-12 12:11 pm", image:"https://via.placeholder.com/400x200/9370DB/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  commodo ligula..."}, 
-        {id:6, title: "Natoque penatibus et magnis",        time:"2018-08-12 12:56 pm", image:"https://via.placeholder.com/400x200/DA70D6/000000", description:"Lorem ipsum  sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."}, 
-        {id:7, title: "Dis parturient montes, nascetur",    time:"2018-08-12 12:33 pm", image:"https://via.placeholder.com/400x200/DDA0DD/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."}, 
+        {id:3, title: "Dipiscing elit. Aenean ",            time:"2017-08-05 12:21 pm", image:"https://via.placeholder.com/400x200/000080/000000", description:"Lorem ipsum dolor sit , consectetuer  elit. Aenean commodo ligula..."},
+        {id:4, title: "Commodo ligula eget dolor.",         time:"2015-08-12 12:00 pm", image:"https://via.placeholder.com/400x200/48D1CC/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."},
+        {id:5, title: "Aenean massa. Cum sociis",           time:"2013-06-12 12:11 pm", image:"https://via.placeholder.com/400x200/9370DB/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  commodo ligula..."},
+        {id:6, title: "Natoque penatibus et magnis",        time:"2018-08-12 12:56 pm", image:"https://via.placeholder.com/400x200/DA70D6/000000", description:"Lorem ipsum  sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."},
+        {id:7, title: "Dis parturient montes, nascetur",    time:"2018-08-12 12:33 pm", image:"https://via.placeholder.com/400x200/DDA0DD/000000", description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula..."},
         {id:8, title: "Ridiculus mus. Donec quam",          time:"2018-06-12 12:44 pm", image:"https://via.placeholder.com/400x200/4169E1/000000", description:"Lorem ipsum  sit amet, consectetuer adipiscing elit.  commodo ligula..."},
         {id:9, title: "Felis, ultricies nec, pellentesque", time:"2012-07-12 12:23 pm", image:"https://via.placeholder.com/400x200/FA8072/000000", description:"Lorem ipsum dolor sit amet, consectetuer  elit. Aenean commodo ligula..."},
       ]
     };
   }
 
-  
+
 
   render() {
-    const { navigate } = this.props.navigation;    
+    const { navigate } = this.props.navigation;
     return (
       <BackContainer>
       <BackButton goBack={this.props.navigation.goBack}/>
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   title:{
     fontSize:18,
     flex:1,
-  }, 
+  },
   description:{
     fontSize:15,
     color:"#888",
@@ -160,4 +159,4 @@ const styles = StyleSheet.create({
   timeContainer:{
     flexDirection:'row'
   },
-});  
+});
