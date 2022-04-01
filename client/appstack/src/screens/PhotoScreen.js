@@ -16,9 +16,7 @@ import {
   Button
 } from 'react-native';
 
-export default function PhotoScreen{
-  const [email, setEmail] = useState();
-  const [isLoading, setLoading] = useState(true);
+export default class PhotoScreen extends Component {
 
   constructor(props) {
     super(props);
