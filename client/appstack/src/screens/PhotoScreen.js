@@ -18,6 +18,7 @@ import {
 
 export default class PhotoScreen extends Component {
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -160,4 +161,3 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
 });  
-                                            
