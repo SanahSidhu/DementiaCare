@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState({ value: '', error: '' })
   const [isLoading, setIsLoading] = useState(false);
-  const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
+  const baseUrl = 'https://9f9e-120-57-218-232.ngrok.io';
 
   const onLoginPressed = async (event) => {
     const passwordError = passwordValidator(password.value)
@@ -26,15 +26,6 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    setIsLoading(true);
-    try {
-      const response = await axios.post(`${baseUrl}/patient/login`, {
-        email,
-        password,
-      });
-      if (response.status === 201) {
-        alert(` You have created: ${JSON.stringify(response.data)}`);
-        setIsLoading(false);
   //   setIsLoading(true);
   //   try {
   //     const response = await axios.post(`${baseUrl}/patient/login`, {
@@ -55,9 +46,7 @@ export default function LoginScreen({ navigation }) {
   //   }
 
     let url;
-
-    url = `https://8503-122-174-132-140.ngrok.io/patient/login`;
-
+    url = `https://9f9e-120-57-218-232.ngrok.io/patient/login`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -82,7 +71,6 @@ export default function LoginScreen({ navigation }) {
       })
       .catch((error) => {
         console.error(error);
-
         setEmail('');
         setPassword('');
       });

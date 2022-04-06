@@ -37,7 +37,6 @@ export default class Dashboard extends Component{
     const { navigate } = this.props.navigation;
     if(item.name === "CheckList") {
         navigate('CheckList');
-<<<<<<< Updated upstream
     } else if(item.name === "Photos") {
         navigate('PhotoScreen');
     } else if(item.name === "Medication") {
@@ -47,17 +46,6 @@ export default class Dashboard extends Component{
     } else if(item.name === "Contacts") {
         navigate('Contacts');
     } else {
-=======
-    // } else if(item.name === "Photos") {
-    //     navigate('PhotoScreen');
-    // } else if(item.name === "Medication") {
-    //     navigate('Medication');
-    // } else if(item.name === "Notes") {
-    //     navigate('MemoScreen');
-    // } else if(item.name === "Contacts") {
-    //     navigate('Contacts');
-    // } else {
->>>>>>> Stashed changes
         Alert.alert('Message', 'Item clicked. '+item.name);
     }
   }

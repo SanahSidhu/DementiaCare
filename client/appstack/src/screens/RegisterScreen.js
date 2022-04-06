@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -35,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
     navigation.navigate('LoginScreen')
 
     let url;
-    url = `https://8503-122-174-132-140.ngrok.io/patient/signup`;
+    url = `https://9f9e-120-57-218-232.ngrok.io/patient/signup`;
     fetch(url, {
       method: 'POST',
       headers: {

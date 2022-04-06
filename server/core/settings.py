@@ -67,7 +67,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5000",
     "http://localhost:8000",
-    # ":8000"
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -125,7 +124,8 @@ else:
 if DEBUG:
     CACHES = {
         "default": {
-            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": "/home/nvombat/Desktop/DementiaCare/server/cache",
         }
     }
 else:

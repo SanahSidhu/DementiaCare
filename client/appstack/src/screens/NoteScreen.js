@@ -17,41 +17,6 @@ import SearchBar from '../components/SearchBar';
 import { useNotes } from '../contexts/NoteProvider';
 import colors from '../misc/colors';
 
- const [email, setEmail] = useState();
- const [isLoading, setLoading] = useState(true);
- const baseUrl = 'https://8503-122-174-132-140.ngrok.io';
-  const [data, setData] = useState([]);
-  console.log(data);
-
-
-  const readData = async () => {
-    try {
-      const userEmail = await AsyncStorage.getItem(STORAGE_KEY)
-      if (userEmail !== null) {
-        alert('email fetched')
-        setEmail(userEmail)
-      }
-    } catch (e) {
-      alert('Failed to fetch the data from storage')
-    }
-  }
-
-  useEffect(() => {
-    readData()
-  }, [])
-
-
-  useEffect(() => {
-    let url;
-    url = `${baseUrl}/patient/notes?Email=${email}`;
-  alert('Get Request Sent')
-  fetch(url)
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
-
 const reverseData = data => {
   return data.sort((a, b) => {
     const aInt = parseInt(a.time);
@@ -76,39 +41,6 @@ const NoteScreen = ({ user, navigation }) => {
     const note = { id: Date.now(), title, desc, time: Date.now() };
     const updatedNotes = [...notes, note];
     setNotes(updatedNotes);
-
-    let url;
-    url = `${baseUrl}/patient/notes`;
-
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Email: email,
-        Text: notes,
-        Function: 'Add',
-        returnSecureToken: true,
-      }),
-    })
-      .then((res) => {
-        if (res) {
-          return res.data;
-        } else {
-          return res.json().then((data) => {
-            let errorMessage = 'Task not stored';
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setNotes('');
-      });
-
     await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
   };
 
