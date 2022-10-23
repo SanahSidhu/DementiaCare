@@ -25,7 +25,7 @@
     "parse": "^3.4.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-native": "0.64.3",
+    "react-native": "0.70.3",
     "react-native-calendar-strip": "^2.2.5",
     "react-native-calendars": "^1.1277.0",
     "react-native-gesture-handler": "~2.1.0",
